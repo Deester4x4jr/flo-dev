@@ -4,3 +4,6 @@
 [submodule "modules/stdlib"]
 	path = modules/stdlib
 	url = https://github.com/puppetlabs/puppetlabs-stdlib/
+[submodule "modules/ruby"]
+	path = modules/ruby
+	url = https://github.com/puppetlabs/puppetlabs-ruby
