@@ -6,24 +6,56 @@ Exec { path => [ '/bin/', '/sbin/', '/usr/bin/', '/usr/sbin/'] }
 File { owner => 0, group => 0, mode => 0644 }
 
 class { 'apt':
-  always_apt_update => true
+  update => {
+    frequency => 'always',
+  },
 }
 
-class build-essentials-requirement {
-  package { "build-essential":
-    ensure => "installed"
+class pkg-setup {
+  package { 'build-essential':
+    ensure => 'installed'
   }
+  # exec { 'stop-apache':
+  #   command => 'sudo service apache2 stop',
+  #   subscribe => Package['build-essential'],
+  #   refreshonly => true,
+  # }
+  # exec { 'purge-apache':
+  #   command => 'sudo apt-get purge apache2',
+  #   subscribe => Exec['stop-apache'],
+  #   refreshonly => true,
+  # }
+  # exec { 'autoremove':
+  #   command => 'sudo apt-get autoremove --purge -y',
+  #   subscribe => Exec['purge-apache'],
+  #   refreshonly => true,
+  # }
 }
+
+# class remove-pkgs {
+#   package { 'apache2':
+#     ensure => 'purged',
+#   }
+#   exec { 'autoremove':
+#     command => 'sudo /usr/bin/apt-get autoremove --purge -y',
+#     subscribe => Package['apache2'],
+#     refreshonly => true,
+#   }
+# }
 
 class config-ruby {
 
-  group { '::ruby':
-    gems_version => 'latest'
+  class { '::ruby':
+    gems_version => 'latest',
+  }
+
+  class { '::ruby::dev':
+    ensure => 'installed',
   }
 
   exec { 'install-serverpilot-gem':
-    command => 'gem install ServerPilot',
-    require => Group['::ruby'],
+    command => 'sudo gem install ServerPilot',
+    require => [ Class['::ruby'], Class['::ruby::dev'] ],
   }
 }
 
@@ -42,13 +74,14 @@ class serverpilot {
   exec { 'run-serverpilot-script':
     command => 'ruby /home/vagrant/shared/serverpilot/serverpilot-provision-script.rb',
     refreshonly => true,
-    require => [ Class['config-ruby'] ]
+    subscribe => Exec['install-serverpilot-gem'],
+    require => [ Class['config-ruby'], Class['pkg-setup'] ]
   }
 }
 
-include build-essentials-requirement
-include config-ruby
-include serverpilot
+include pkg-setup
+# include config-ruby
+# include serverpilot
 
 # include nginx-requirement
 # include php-setup

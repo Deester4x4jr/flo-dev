@@ -1,8 +1,31 @@
 require 'ServerPilot'
+require 'logger'
 
-client_id = cid_PPdOrmNPimLw7aFZ
-api_key = yoG3S3I2gpR26BkfBtcvUq7vQu5pK8bw8RHy0q9Byo8
+log = Logger.new('/home/vagrant/log.out')
+log.progname = 'ServerPilot'
+log.level = Logger::DEBUG
 
-sp = ServerPilot::API.new(client_id, api_key)
+CLIENT_ID = 'cid_IIQ3qWQlBRAN3B3X'
+API_KEY = 'N6AbidaNSRnh7iKCE8bPCWh4ChVnvZQSjMkgx0V65ZE'
 
-puts sp.get_servers
+sp = ServerPilot::API.new(CLIENT_ID, API_KEY)
+sp.scheme = 'https'
+
+# server_list = sp.get_servers
+
+# server_list.to_h.each { |k,v|
+#     if k == :body
+#         log.info "Existing Servers:"
+#         log.info JSON.pretty_generate(v['data'])
+#     end
+# }
+
+# log.info "\nConnecting this Server...\n=========================\n"
+
+# begin 
+#   new_server = sp.post_servers {name: 'test-connect-server'}
+# rescue Exception => e
+#   log.error e
+# else
+#   log.info new_server
+# end

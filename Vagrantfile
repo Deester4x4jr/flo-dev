@@ -41,6 +41,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell,
     inline: "sudo apt-get update -y && sudo apt-get install puppet -y"
 
+  # config.vm.provision :reload
+
   # config.vm.provision :shell,
   #   inline: "sudo usermod -a -G www-data vagrant"
 
@@ -54,4 +56,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     puppet.module_path = "./modules"
     puppet.options = "--verbose"
   end
+
+  config.vm.provision :reload
 end
