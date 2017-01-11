@@ -1,4 +1,36 @@
-#!/usr/bin/env python
+#!/bin/sh
+# -*- mode: Python -*-
+
+# The installer (this current file) is executed initially as a shell script.
+# Here we either "exec python serverpilot-installer" or exit if we can't find a
+# version of python this script is compatible with.
+""":"
+install_on_el5() {
+  echo "***************************************************************************"
+  echo "It looks like you're using RHEL/CentOS 5. ServerPilot only supports Ubuntu."
+  echo
+  echo "https://serverpilot.io/community/articles/server-requirements.html"
+  echo "***************************************************************************"
+  exit 1
+}
+
+# Some distros only have a "python3" command by default.
+# Others may have Python 2.4 as "python" but with another version installed
+# installed alongside it.
+for py in python3 python27 python2.7 python26 python2.6 ; do
+    which $py >/dev/null 2>&1 && exec $py "$0" "$@"
+done
+if which python >/dev/null 2>&1 ; then
+    if [ "`python -V 2>&1`" == "Python 2.4.3" ]; then
+        install_on_el5
+        exit 0
+    fi
+    exec python "$0" "$@"
+fi
+echo "Unable to install ServerPilot. Python not found."
+exit 1
+":"""
+
 """
 ServerPilot installer. See https://serverpilot.io
 """
@@ -24,7 +56,10 @@ if sys.version_info[:2] < (2, 7):
 
 import argparse
 import base64
-import ConfigParser
+try:
+    import ConfigParser as configparser
+except:
+    import configparser
 import datetime
 import errno
 import hashlib
@@ -38,7 +73,19 @@ import subprocess
 from time import gmtime, strftime
 import tempfile
 import traceback
-import urllib2
+try:
+    from urllib.parse import urlparse, urlencode
+    from urllib.request import urlopen, Request
+    from urllib.error import HTTPError
+except ImportError:
+    from urlparse import urlparse
+    from urllib import urlencode
+    from urllib2 import urlopen, Request, HTTPError
+
+
+# Python 3 renamed raw_input to input.
+if sys.version_info[0] >= 3:
+    raw_input = input
 
 
 API_URL = 'https://api.serverpilot.io/v1'
@@ -334,7 +381,7 @@ class Installer(object):
         if data is not None:
             data = json.dumps(data).encode()
             headers['Content-Type'] = 'application/json'
-        return urllib2.Request(API_URL + api_path, data, headers)
+        return Request(API_URL + api_path, data, headers)
 
     def insecure_hashedkey_api_request(self, api_path, data=None):
         """Make an API request that doesn't use SSL securely.
@@ -346,17 +393,17 @@ class Installer(object):
         if data is not None:
             data = json.dumps(data).encode()
             headers['Content-Type'] = 'application/json'
-        hashedkey = hashlib.sha256(self.apikey).hexdigest()
+        hashedkey = hashlib.sha256(self.apikey.encode()).hexdigest()
         authval = '{}:{}'.format(self.serverid, hashedkey)
         b64authval = base64.b64encode(authval.encode()).decode()
         headers['Authorization'] = 'Basic {}'.format(b64authval)
-        return urllib2.Request(API_URL + api_path, data, headers)
+        return Request(API_URL + api_path, data, headers)
 
     def record_error(self, msg, exc=None):
         self.errors.append(msg)
         write_to_log_file(msg)
         if exc:
-            write_to_log_file(traceback.format_exc(exc))
+            write_to_log_file(traceback.format_exc())
         write_to_log_file('-' * 80)
 
     def run(self):
@@ -364,20 +411,20 @@ class Installer(object):
             try:
                 self._run()
             except SystemExit:
-                urllib2.urlopen(self.report(status='exit'))
+                urlopen(self.report(status='exit'))
                 raise
             except UserQuit:
-                urllib2.urlopen(self.report(status='abort'))
+                urlopen(self.report(status='abort'))
             except InstallError as exc:
                 self.record_error('', exc)
-                urllib2.urlopen(self.report(status='fail'))
+                urlopen(self.report(status='fail'))
             except Exception as exc:
                 self.record_error('', exc)
-                urllib2.urlopen(self.report(status='error'))
+                urlopen(self.report(status='error'))
                 raise
             else:
-                urllib2.urlopen(self.report(status='success'))
-        except urllib2.HTTPError as exc:
+                urlopen(self.report(status='success'))
+        except HTTPError as exc:
             self.record_error('Failed to send install report', exc)
 
     def _run(self):
@@ -394,7 +441,7 @@ class Installer(object):
             self.check_serverpilot_user()
             self.ask_server_ident()
             self.check_mysql()
-            # self.check_apache()
+            self.check_apache()
             self.check_nginx()
         except KeyboardInterrupt:
             write_to_log_file('Quiting installer.')
@@ -502,8 +549,8 @@ class Installer(object):
                 write_to_log_file('Testing apikey for serverid {}'.format(self.serverid))
                 url = '/authtest/server/hashedkey'
                 req = self.insecure_hashedkey_api_request(url)
-                urllib2.urlopen(req)
-            except urllib2.HTTPError as e:
+                urlopen(req)
+            except HTTPError as e:
                 if e.code == 401:
                     write_to_log_file('Invalid Server ID and API key.')
                     print(color.red('Invalid Server ID and API key. Please enter them again.'))
@@ -515,7 +562,7 @@ class Installer(object):
             break
         mkdir_p(SERVERPILOT_CONF_DIR)
         with open(AGENT_CONF_FILE, 'w') as f:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.add_section('server')
             config.set('server', 'id', self.serverid)
             config.set('server', 'apikey', self.apikey)
@@ -565,7 +612,7 @@ class Installer(object):
     def add_repo(self):
         def add_repo_deb():
             # apt-key doesn't complain if we add a key that already exists.
-            cmd(['apt-key', 'add', '-'], RELEASES_KEY)
+            cmd(['apt-key', 'add', '-'], RELEASES_KEY.encode())
 
             path = '/etc/apt/sources.list.d/serverpilot.list'
 

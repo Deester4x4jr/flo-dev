@@ -38,16 +38,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   provider.size = '512MB'
   # end
 
+  # Update APT and install Puppet
   config.vm.provision :shell,
-    inline: "sudo apt-get update -y && sudo apt-get install puppet -y"
+    inline: "sudo apt-get update -y && sudo apt-get install puppet -y --no-install-recommends"
 
   # config.vm.provision :reload
-
-  # config.vm.provision :shell,
-  #   inline: "sudo usermod -a -G www-data vagrant"
-
-  # config.vm.provision :shell,
-  #   inline: "sudo chown -R vagrant:www-data /home/vagrant && sudo chmod -R g+w /home/vagrant && sudo chmod g+s /home/vagrant"
 
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
@@ -57,5 +52,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     puppet.options = "--verbose"
   end
 
-  config.vm.provision :reload
+  # Shell Provisioner
+  # NEED TO BUILD THIS OUT - SHOULD DO THE FOLLOWING:
+  # - ln -s [webDirs] --> [userDirs]
+  # - yadda
+  # - yadda
+  # - ln -s [webDirs] --> [userDirs]
+  # config.vm.provision "shell", path: "provision/setup.sh"
+
+  # Sync the local theme folder to the wordpress theme folder
+  # config.vm.synced_folder "./app/theme", "/srv/users/serverpilot/apps/wordpress/public/wp-content/themes/flo-theme-2017", create: true, id: "theme-files"
+
+  # config.vm.provision :reload
 end
