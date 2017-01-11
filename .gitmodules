@@ -7,3 +7,6 @@
 [submodule "modules/ruby"]
 	path = modules/ruby
 	url = https://github.com/puppetlabs/puppetlabs-ruby
+[submodule "modules/wp"]
+	path = modules/wp
+	url = https://github.com/rmccue/puppet-wp.git
