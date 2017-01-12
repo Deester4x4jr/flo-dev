@@ -54,15 +54,12 @@ class serverpilot {
   }
 }
 
+
 include pkg-setup
 include config-ruby
 include serverpilot
 
-# include nginx-requirement
-# include php-setup
-
-
 
 notice "------------------------------------------------------------------------"
-notice "|                     Wordpress Kickstart                              |"
+notice "|                         Wordpress Kickstart                          |"
 notice "------------------------------------------------------------------------"

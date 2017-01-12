@@ -44,9 +44,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # config.vm.provision :reload
 
+  # puppet stage 1: Provision with ServerPilot
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = "manifests"
-    puppet.manifest_file  = "wordpress_kickstart.pp"
+    puppet.manifest_file  = "init.pp"
 
     puppet.module_path = "./modules"
     puppet.options = "--verbose"
@@ -60,8 +61,21 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # - ln -s [webDirs] --> [userDirs]
   # config.vm.provision "shell", path: "provision/setup.sh"
 
+  # config.vm.provision :reload
+
   # Sync the local theme folder to the wordpress theme folder
-  # config.vm.synced_folder "./app/theme", "/srv/users/serverpilot/apps/wordpress/public/wp-content/themes/flo-theme-2017", create: true, id: "theme-files"
+  config.vm.synced_folder "./app/theme", "/srv/users/serverpilot/apps/wordpress/public/wp-content/themes/flo-theme-2017", create: true, id: "theme-files"
+
+  # puppet stage 2: Configure WordPress
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file  = "wp_init.pp"
+
+    puppet.module_path = "./modules"
+    puppet.options = "--verbose"
+  end
+
+  # config.vm.provision :reload
 
   # config.vm.provision :reload
 end

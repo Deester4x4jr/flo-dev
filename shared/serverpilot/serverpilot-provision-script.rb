@@ -58,15 +58,6 @@ SHARE_PATH = '/home/vagrant/shared/serverpilot'
 sp = ServerPilot::API.new(CLIENT_ID, API_KEY)
 # sp.scheme = 'https'
 
-# If you want to list all servers
-# server_list = sp.get_servers
-
-# server_list.to_h.each { |k,v|
-#     if k == :body
-#         log.info "Existing Servers:\n" + JSON.pretty_generate(v['data'])
-#     end
-# }
-
 
 
 ##############################################################################
@@ -145,28 +136,44 @@ rescue Exception => e
     abort
 else
     log.info action
-    log.info "Success! This server has been successfully provisioned with ServerPilot!"
+    log.info "The provisioning script has completed seccessfully."
 end
 
-exit
+# Step 4: Check for the new system user
+log.info "Checking for the new system user..."
 
-##########################################################################################
-# THIS ISNT WORKING RIGHT NOW... MIGHT NEED TO UPGRADE MY SERVERPILOT ACCOUNT
-##########################################################################################
-# Step 4: Create a system user so that we can create an app
-log.info "Creating a new System User..."
 begin
-    action = sp.post_sysusers({serverid: SRVR_ID, name: 'serverpilot'})
-rescue Exception => e
-    log.error e
-    abort
-else
-    USR_ID = action.to_h[:body]['data']['id']
-    log.info "Success! The serverpilot user has been created!\nid => " + USR_ID
+    found_user = false
+    count = 0
+
+    until found_user != false || count == 6
+        begin
+            action = sp.get_sysusers
+        rescue Exception => e
+            log.error e
+            abort
+        else
+            action.to_h[:body]['data'].each { |srv|
+                if srv['serverid'] == SRVR_ID
+                    found_user = srv['id']
+                end
+            }
+        end
+        count+=1
+        sleep(10)
+    end
+
+    if count == 6 && !found_user
+        log.error "Uh-Oh... We couldn't find the server's sysyser"
+        exit(false)
+    else
+        USR_ID = found_user
+        log.info "Success!  This system has been provisioned with ServerPilot!\n" + ("   sysuser_id => " + USR_ID).bold
+    end
 end
 
 # Step 5: Create an app so that we can install wordpress
-log.info "Creating an APP Profile..."
+log.info "Creating a blank App Profile..."
 begin
     # Need to make these variables in the future maybe?
     action = sp.post_apps({name: 'wordpress', sysuserid: USR_ID, runtime: 'php7.0', domains: ['flo.dev']})
@@ -174,5 +181,19 @@ rescue Exception => e
     log.error e
     abort
 else
-    log.info "Success! The APP has been created! We are ready for Wordpress!\n" + JSON.pretty_generate(action.to_h[:body]['data'])
+    action = action.to_h[:body]['data']
+    APP_ID = action['id']
+    log.info "Success! The APP has been created!\n" + ("   app_id => " + APP_ID).bold
+end
+
+# Step 6: Create a DB for the wordpress app
+log.info "Creating a blank Database..."
+begin
+    action = sp.post_dbs({appid: APP_ID, name: "flo-db", user: {name: "flo-wp-admin", password: "Xw#659Z{_w!2r*Hp"}})
+rescue Exception => e
+    log.error e
+    abort
+else
+    action = action.to_h[:body]['data']
+    log.info "Success!  The DB has been created!  We are now ready for Wordpress!\n" +  JSON.pretty_generate(action)
 end
