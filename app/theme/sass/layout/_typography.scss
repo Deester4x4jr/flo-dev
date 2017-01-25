@@ -26,30 +26,31 @@ $web-fonts-protocol: 'https' !global !default;
 // Google web fonts in use:
 $url: web-fonts-url(
   ('Libre Franklin':
-    ('200',
-     '200 italic',
+    ('100',
+     '200'
      '300',
      '300 italic',
      '400',
-     '400 italic',
      '500',
-     '500 italic',
+     '600',
      '700',
-     '700 italic',
-     '900',
-     '900 italic')
-     ),
-  ('Fira Sans':
-    ('300',
-    '300 italic',
-    '400',
-    '400 italic',
-    '500',
-    '500 italic',
-    '700',
-    '700 italic'
+     '800',
+     '900'
     )
-  )
+  ),
+  ('Exo':
+    ('600',
+     '700',
+     '800',
+     '900'
+    )
+  ),
+  ('Teko':
+    ('500',
+     '600',
+     '700'
+    )
+  ),
   ('Source Sans Pro':
     ('700',
      '700 italic'
@@ -58,6 +59,66 @@ $url: web-fonts-url(
 );
 
 @import url($url);
+
+
+
+
+/*****************************
+ *  Fluid Typography Mixins  *
+*****************************/
+
+// Change scale
+
+// $mod_1: 1.125;
+// $mod_2: 1.250;
+
+
+// Fluid Type Mixin
+
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+
+// Truly Fluid Typography Mixin
+// Examples:    @include fluid-type(37.5rem, 80rem, 2.5rem, 5rem);
+//              @include fluid-type(rem-calc(700px), 80rem, 1.5rem, 3rem, padding-bottom);
+
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size, $props: font-size) {
+
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+        @each $prop in $props {
+            #{$prop}: $min-font-size;
+        }
+        @media screen and (min-width: $min-vw) {
+            @each $prop in $props {
+                #{$prop}: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+            }
+        }
+
+        @media screen and (min-width: $max-vw) {
+            @each $prop in $props {
+                #{$prop}: $max-font-size;
+            }
+        }
+    }
+  } @else {
+    @error "Detected mixed units. Please use the same units for all parameters. " + $u1 +", " + $u2 + ", " + $u3 +", "+ $u4;
+  }
+}
+
+/*********************************
+ *  End Fluid Typography Mixins  *
+*********************************/
+
+
+
 
 // Viewport sized typography with minimum and maximum values
 // Inspiration: https://css-tricks.com/molten-leading-css/
@@ -170,6 +231,13 @@ body {
       color: $color-headings;
       font-family: $font-headings;
       font-weight: $headings-weight;
+      line-height: 1;
+    }
+
+    h1,
+    h2 {
+      color: white;
+      text-shadow: 0.125rem 0.125rem 0.125rem rgba(0,0,0,0.5);
     }
 
     // Define heading scales
@@ -210,12 +278,18 @@ body {
 
       h1,
       .h1 {
-        @include responsive-font(3.2vw, 32px, 68px);
+        // @include responsive-font(3.2vw, 32px, 68px);
+        @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), 2.75rem, 5rem);
+        @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), 0.35rem, 1.25rem, margin-bottom);
+        font-weight: $h1-weight;
+        text-transform: uppercase;
       }
 
       h2,
       .h2 {
-        @include responsive-font(2.4vw, 24px, 46px);
+        @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), 1.35rem, 2rem);
+        font-weight: $h2-weight;
+        margin: 0;
       }
 
       h3,
@@ -278,11 +352,11 @@ body {
     .h1 {
       letter-spacing: -.02em;
 
-      @if $headings-line-height-setup == flexible {
-        line-height: 3.8rem;
-      } @else {
-        line-height: $headings-line-height-forced;
-      }
+      // @if $headings-line-height-setup == flexible {
+      //   line-height: 3.8rem;
+      // } @else {
+      //   line-height: $headings-line-height-forced;
+      // }
 
       &:first-child {
         margin-top: 0;
@@ -293,11 +367,11 @@ body {
     .h2 {
       letter-spacing: -.02em;
 
-      @if $headings-line-height-setup == flexible {
-        line-height: 3.2rem;
-      } @else {
-        line-height: $headings-line-height-forced;
-      }
+      // @if $headings-line-height-setup == flexible {
+      //   line-height: 3.2rem;
+      // } @else {
+      //   line-height: $headings-line-height-forced;
+      // }
 
       &:first-child {
         margin-top: 0;

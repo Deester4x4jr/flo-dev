@@ -24,13 +24,14 @@
 // Global features
 @import '../features/top';
 @import '../features/gallery';
+@import '../features/hero-effects';
 
 // Views
-@import '../views/front-page';
+@import '../views/hero';
 @import '../views/page';
 @import '../views/blog';
 @import '../views/single';
 @import '../views/comments';
 
 // WooCommerce
-@import '../woocommerce/woocommerce';
+// @import '../woocommerce/woocommerce';

@@ -1,0 +1,57 @@
+// Side layout
+.hero {
+
+  @include background-cover();
+  background-position: center;
+  background-color: #e9e9e9;
+  position: relative;
+  min-height: 300px;
+  overflow: hidden;
+
+  &.hero-front {
+
+    background-color: transparent;
+    height: 70vh;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  &.hero-page {
+
+    height: 50vh;
+  }
+
+  & .page-titles {
+    @include vertical-align;
+    text-align: center;
+    z-index: 4;
+  }
+
+  & .hero-film,
+  & .hero-color,
+  & .hero-image {
+    position: absolute;
+    @include absolute-cover(-2px);
+  }
+
+  & .hero-film {
+    background: url($filmGrain);
+    z-index: 3;
+  }
+
+  & .hero-color {
+    background-position: center;
+    z-index: 2;
+
+    &.hero-radial {
+      background-size: 120% 150%;
+    }
+  }
+
+  & .hero-image {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1;
+  }
+}

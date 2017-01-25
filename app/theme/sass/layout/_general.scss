@@ -1,14 +1,7 @@
 // General styles that repeat everywhere
 
-// Basic slide layout
-.slide {
-  @include background-cover();
-  background-position: center;
-  background-color: #e9e9e9;
-  position: relative;
-  min-height: 300px;
-  max-height: 700px;
-}
+// Unccomment for jeet debug mode;
+// @include debug;
 
 // Default shade on top of slides
 .shade {

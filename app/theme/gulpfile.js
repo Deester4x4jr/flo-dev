@@ -8,7 +8,7 @@ var changed     = require('gulp-changed');
 var gulp        = require('gulp');
 var sass        = require('gulp-sass');
 var sourcemaps  = require('gulp-sourcemaps');
-var browserSync = require('browser-sync').create();
+var reload      = require('gulp-livereload');
 var notify      = require('gulp-notify');
 var prefix      = require('gulp-autoprefixer');
 var minifycss   = require('gulp-clean-css');
@@ -30,6 +30,7 @@ var sassFile = 'sass/base/global.scss';
 var cssDest = 'css';
 var customjs = 'js/scripts.js';
 var jsSrc = 'js/src/**/*.js';
+var phpSrc = '**/*.php';
 var jsDest = 'js';
 
 /*
@@ -51,29 +52,13 @@ var handleError = function(task) {
 
 /*
 
-BROWSERSYNC
-===========
-
-Notes:
-   - Add only file types you are working on - if watching the whole themeDir,
-     task trigger will be out of sync because of the sourcemap-files etc.
-   - Adding only part of the files will also make the task faster
-
+STYLES
+======
 */
 
-gulp.task('browsersync', function() {
+gulp.task('php', function() {
 
-  var files = [
-    '**/*.php',
-    jsSrc
-  ];
-
-  browserSync.init(files, {
-    proxy: "dudetest.dev",
-    browser: "Google Chrome",
-    open: "external",
-    notify: true
-  });
+  reload.reload();
 
 });
 
@@ -113,7 +98,8 @@ gulp.task('styles', function() {
       sourceMap: true
     }))
     .pipe(gulp.dest(cssDest))
-    .pipe(browserSync.stream());
+    // .pipe(browserSync.stream());
+    .pipe(reload());
 
 });
 
@@ -133,7 +119,8 @@ gulp.task('js', function() {
         ])
         .pipe(concat('all.js'))
         .pipe(uglify({preserveComments: false, compress: true, mangle: true}).on('error',function(e){console.log('\x07',e.message);return this.end();}))
-        .pipe(gulp.dest(jsDest));
+        .pipe(gulp.dest(jsDest))
+        .pipe(reload());
 });
 
 /*
@@ -143,11 +130,22 @@ WATCH
 
 */
 
+reload.listen();
+
 // Run the JS task followed by a reload
-gulp.task('js-watch', ['js'], browserSync.reload);
-gulp.task('watch', ['browsersync'], function() {
+
+// gulp.task('js-watch', ['js'], browserSync.reload);
+// gulp.task('watch', ['browsersync'], function() {
+//
+//   gulp.watch(sassSrc, ['styles']);
+//   gulp.watch(jsSrc, ['js-watch']);
+//
+// });
+
+gulp.task('default', function() {
 
   gulp.watch(sassSrc, ['styles']);
-  gulp.watch(jsSrc, ['js-watch']);
+  gulp.watch(jsSrc, ['js']);
+  gulp.watch(phpSrc, ['php']);
 
 });

@@ -1,13 +1,47 @@
 // Site header
+
 .site-header {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: fixed;
+  @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), rem-calc(50px), rem-calc(80px), height);
   width: 100%;
-  z-index: 1;
+  z-index: 10000;
+  background: rgba(0, 216, 141, 1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  transition: 0.3s opacity ease;
+  opacity: 0.25;
+
+  &:hover {
+    opacity: 1;
+  }
 
   .container {
     padding: 0;
+  }
+
+  .nav-left,
+  .nav-right {
+
+    @include column(4/10);
+
+    @media(max-width: ($responsivenav)-1px) {
+      display: none;
+    }
+
+    .nav-collapse {
+
+      @media(min-width: $responsivenav) {
+        @include column(10/10);
+
+        // Set these based on the logo size
+        // Might change once we actually put nav in there
+        padding-top: 40px;
+        padding-bottom: 40px;
+
+        ul {
+          float: right;
+        }
+      }
+    }
   }
 
   .site-branding {
@@ -18,43 +52,28 @@
     }
 
     @media(max-width: ($responsivenav)-1px) {
-      @include span(1/2);
-      padding-left: 20px;
-      padding-right: 20px;
+      @include centered;
     }
 
     .site-title {
       overflow: hidden;
+      margin: 0;
 
-      a {
-        @include hiddentext();
-        background-image: url('../svg/logo.svg');
-        background-repeat: no-repeat;
+      a, img {
+        display: block;
+      }
 
-        // Logo size
-        width: 80px;
-        height: 80px;
+      img {
+        max-height: 60%;
+        @include vertical-align;
       }
     }
   }
 
-  .nav-collapse {
-    @media(min-width: $responsivenav) {
-      @include column(8/10);
-
-      // Set these based on the logo size
-      padding-top: 40px;
-      padding-bottom: 40px;
-
-      ul {
-        float: right;
-      }
-    }
-  }
-
-  .site-title {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 2rem;
+  & .container,
+  & .site-branding,
+  & .site-branding .site-title,
+  & .site-branding .site-title a {
+    height: 100%;
   }
 }

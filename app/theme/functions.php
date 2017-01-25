@@ -99,7 +99,7 @@ add_action( 'wp_before_admin_bar_render', 'remove_admin_bar_links' );
 */
 function remove_admin_menu_links() {
     remove_menu_page('themes.php?page=editcss');
-    remove_menu_page('edit.php');
+    // remove_menu_page('edit.php');
     remove_menu_page('widgets.php');
     remove_menu_page('edit-comments.php');
     remove_menu_page('admin.php?page=jetpack');
@@ -162,32 +162,14 @@ $GLOBALS['comment'] = $comment; ?>
  *
  * @link http://davidwalsh.name/remove-wordpress-admin-bar-css
  */
-add_action( 'get_header', 'air_remove_admin_login_header' );
-function air_remove_admin_login_header() {
-  remove_action( 'wp_head', '_admin_bar_bump_cb' );
-}
+// add_action( 'get_header', 'air_remove_admin_login_header' );
+// function air_remove_admin_login_header() {
+//   remove_action( 'wp_head', '_admin_bar_bump_cb' );
+// }
 
-if ( getenv( 'WP_ENV' ) === 'development' && is_user_logged_in() ) {
-  add_action('wp_head', 'air_dev_adminbar');
-
-  function air_dev_adminbar() { ?>
-    <style>
-      html {
-        height: auto;
-        padding-bottom: 32px;
-      }
-
-			#wpadminbar {
-				top: auto;
-				bottom: 0;
-			}
-
-			#wpadminbar.nojs li:hover > .ab-sub-wrapper,
-			#wpadminbar li.hover > .ab-sub-wrapper {
-				bottom: 32px;
-			}
-		</style>
-<?php }
+// if ( getenv( 'WP_ENV' ) === 'development' && is_user_logged_in() ) {
+if ( WP_ENV === 'dev' && is_user_logged_in() ) {
+  // Do Nothing
 } else {
   show_admin_bar(false);
 }
@@ -258,7 +240,7 @@ function air_scripts() {
   // If you want to use a different CSS per view, you can set it up here
   $air_template = 'global';
 
-  wp_enqueue_style( 'styles', get_template_directory_uri() . '/css/' . $air_template . '.css' );
+  wp_enqueue_style( 'styles', get_template_directory_uri() . '/css/' . $air_template . '.css', array(), 'stuff' );
   wp_enqueue_script( 'jquery-core' );
   wp_enqueue_script( 'scripts', get_template_directory_uri() . '/js/all.js', array(), AIR_VERSION, true );
   wp_localize_script( 'scripts', 'screenReaderTexts', array(
@@ -269,3 +251,201 @@ function air_scripts() {
 	) );
 }
 add_action( 'wp_enqueue_scripts', 'air_scripts' );
+
+// Custom hashing function for creating field and group keys for Custom Fields
+function get_short_hash($groupID, $salt = 'thaw_design') {
+
+  $hash = md5($groupID);
+  $hash = substr($hash,0,13);
+
+  return $hash;
+}
+
+// Function to load all Custom Field Groups from code
+function load_custom_field_groups() {
+
+  $field_definitions = glob(get_template_directory() . '/custom-fields/*.php');
+
+  foreach($field_definitions as $field_group){
+      include $field_group;
+  }
+}
+add_action('acf/init', 'load_custom_field_groups');
+
+
+
+//////////////////////////
+// ACF Helper Functions //
+//////////////////////////
+
+
+
+/*
+*
+*   Function:   make_label
+*   Accepts:    $name (string)
+*   Usage:      Create a proper label from a field or group name
+*   Example:    field_name --> Field Name
+*   Returns:    string
+*
+*/
+function make_label($name) {
+  return ucwords(preg_replace('/[-_]+/',' ',$name));
+}
+
+
+
+/*
+*
+*   Function:   construct_acf_dependencies
+*   Accepts:    $arr (array)
+*   Usage:      Construct a properly formatted array of dependency rules for our acf Custom Field Group
+*   Returns:    array
+*
+*/
+function construct_acf_dependencies($arr) {
+
+  foreach ($arr as $k=>$v) {
+
+    // if dependency is_array, then construct, else construct with defaults ( == '1')
+    if (is_array($v)) {
+      $v = array(
+        'field' => 'field_' . get_short_hash($v[0]),
+        'operator' => $v[1],
+        'value' => $v[2],
+      );
+    } else {
+      $v = array(
+        'field' => 'field_' . get_short_hash($v),
+        'operator' => '==',
+        'value' => '1',
+      );
+    }
+
+    // Push the new dependency to $arr
+    $arr[] = $v;
+
+    // Cleanup $arr
+    unset($arr[$k]);
+  }
+
+  // Wrap $arr in another array to force 'and' ruleset (Need to build in model for 'or' logic as well)
+  $arr = array($arr);
+
+  // Return our newly constructed dependencies
+  return $arr;
+}
+
+
+
+/*
+*
+*   Function:   construct_acf_fields
+*   Accepts:    $arr (array)
+*   Usage:      Construct a properly formatted array of fields for our acf Custom Field Group
+*   Returns:    array
+*
+*/
+function construct_acf_fields($arr) {
+
+  foreach ($arr as $k=>$v) {
+
+    // If 'label' is defined, use that, otherwise create it from the field name
+    if (!(isset($v['label']))) {
+      $v = array('label' => make_label($k)) + $v;
+    }
+
+    // Set our field name
+    $v = array('name' => $k) + $v;
+
+    // Generate our 'unique' key for this field
+    $v = array('key' => 'field_' . get_short_hash($k)) + $v;
+
+    // If there are dependencies, construct them properly
+    if (isset($v['depends'])) {
+      $v['conditional_logic'] = construct_acf_dependencies($v['depends']);
+      unset($v['depends']);
+    }
+
+    // Push our new array of fields to $arr
+    $arr[] = $v;
+
+    // Cleanup $arr
+    unset($arr[$k]);
+  }
+
+  // Return our new array of fields
+  return $arr;
+}
+
+
+
+/*
+*
+*   Function:   construct_acf_locations
+*   Accepts:    $arr (array)
+*   Usage:      Construct a properly formatted array of location rules for our acf Custom Field Group
+*   Returns:    array
+*
+*/
+function construct_acf_locations($arr) {
+
+  foreach ($arr as $k=>$v) {
+
+    foreach ($v as $val=>$op) {
+
+      // Build inner array from nested vars
+      // Wrap $arr in another array to force 'or' ruleset (Need to build in model for 'and' logic as well)
+      $arr[] = array(
+        array(
+          'param' => $k,
+          'operator' => $op,
+          'value' => $val,
+        ),
+      );
+    }
+
+    unset($arr[$k]);
+  }
+
+  // Return our newly constructed locations
+  return $arr;
+}
+
+
+
+/*
+*
+*   Function:   construct_acf_array
+*   Accepts:    $arr (array)
+*   Usage:      Construct a properly formatted array for creating acf Custom Fields
+*   Returns:    array
+*
+*/
+function construct_acf_array($arr) {
+
+  foreach ($arr as $gn=>$gd) {
+
+    // If 'title' is defined, use that, otherwise create it from the group name
+    if ( !(isset($gd['title'])) ) {
+      $gd = array('title' => make_label($gn)) + $gd;
+    }
+
+    // Generate our 'unique' key for this group
+    $gd = array('key' => 'group_' . get_short_hash($gn)) + $gd;
+
+    // Construct the proper array for the fields
+    ( (isset($gd['fields'])) ? $gd['fields'] = construct_acf_fields($gd['fields']) : $noop );
+
+    // Construct the proper array for the locations
+    ( (isset($gd['location'])) ? $gd['location'] = construct_acf_locations($gd['location']) : $noop );
+
+    // Push back to our parent array
+    $arr[] = $gd;
+
+    // Cleanup the parent array and the temp array for the next round
+    unset($arr[$gn]);
+  }
+
+  return $arr;
+}

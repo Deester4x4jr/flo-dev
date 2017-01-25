@@ -12,10 +12,7 @@ class { 'apt':
 }
 
 class pkg-setup {
-  # Not sure if I need these...
-  # package { 'build-essential':
-  #   ensure => 'installed'
-  # }
+    
   package { 'ca-certificates':
     ensure => 'installed'
   }
@@ -60,6 +57,6 @@ include config-ruby
 include serverpilot
 
 
-notice "------------------------------------------------------------------------"
-notice "|                         Wordpress Kickstart                          |"
-notice "------------------------------------------------------------------------"
+notice "--------------------------------------------"
+notice "|          We are doing shit here          |"
+notice "--------------------------------------------"
