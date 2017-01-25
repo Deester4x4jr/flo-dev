@@ -10,3 +10,6 @@
 [submodule "modules/wp"]
 	path = modules/wp
 	url = https://github.com/rmccue/puppet-wp.git
+[submodule "app/plugins/acf-code"]
+	path = app/plugins/acf-code
+	url = https://github.com/mbovel/acf-code.git
