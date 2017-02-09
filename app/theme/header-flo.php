@@ -26,50 +26,17 @@
 <div id="page" class="site">
 	<!-- <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'air' ); ?></a> -->
 
-	<header id="masthead" class="site-header">
+	<!-- Omnipresent contact bubble -->
+	<div id="contact-bubble" class="fa-stack fa-lg">
+		<i id="fa-bg" class="fa fa-fw fa-circle fa-stack-4x"></i>
+  	<i id="fa-fg" class="fa fa-fw fa-paper-plane fa-stack-1x"></i>
+	</div>
 
-		<div class="container">
+	<div id="customer-form" class="contact-form">
+		<?php ninja_forms_display_form( 3 ); ?>
+	</div>
 
-			<div class="nav-left">
-				<nav id="nav-left" class="nav-collapse">
-					<!--  -->
-				</nav>
-			</div>
-
-			<div class="site-branding">
-				<p class="site-title" title="<?php bloginfo( 'name' ); ?>"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><img class="logo" src="<?php echo get_template_directory_uri() . '/svg/logo.svg'; ?>" /></a></p>
-			</div>
-
-			<div class="nav-right">
-				<nav id="nav-right" class="nav-collapse">
-					<!--  -->
-				</nav>
-			</div>
-
-			<!-- <button id="nav-toggle" class="nav-toggle" aria-controls="nav" aria-expanded="false"><span class="burger-icon"></span> <span id="nav-toggle-label"><?php esc_html_e( 'Menu', 'air' ); ?></span></button> -->
-
-			<!-- <nav id="nav" class="nav-collapse"> -->
-
-				<?php
-					// wp_nav_menu( array(
-					// 	'theme_location'    => 'primary',
-					// 	'container'       	=> false,
-					// 	'depth'             => 4,
-					// 	'menu_class'        => 'menu-items',
-					// 	'menu_id' 					=> 'menu',
-					// 	'echo'            	=> true,
-					// 	'fallback_cb'       => 'wp_page_menu',
-					// 	'items_wrap'      	=> '<ul class="%2$s" id="%1$s">%3$s</ul>',
-					// 	'walker'            => new Air_Walker(),
-					// 	)
-					// );
-				?>
-
-			<!-- </nav> -->
-
-		</div><!-- .container -->
-	</header><!-- #masthead -->
+	<?php get_template_part( 'template-parts/nav', 'header' ); ?>
 
 	<div id="content" class="site-content">
-    <?php //get_template_part( 'template-parts/hero', get_post_type() ); ?>
-		<?php get_template_part( 'template-parts/blocks/hero', 'banner' ); ?>
+		<?php get_template_part( 'template-parts/hero', 'banner' ); ?>

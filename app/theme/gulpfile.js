@@ -4,8 +4,8 @@ REQUIRED STUFF
 ==============
 */
 
-var changed     = require('gulp-changed');
 var gulp        = require('gulp');
+var changed     = require('gulp-changed');
 var sass        = require('gulp-sass');
 var sourcemaps  = require('gulp-sourcemaps');
 var reload      = require('gulp-livereload');
@@ -17,6 +17,7 @@ var concat      = require('gulp-concat');
 var util        = require('gulp-util');
 var header      = require('gulp-header');
 var pixrem      = require('gulp-pixrem');
+var include     = require('gulp-include');
 var exec        = require('child_process').exec;
 
 /*
@@ -30,6 +31,7 @@ var sassFile = 'sass/base/global.scss';
 var cssDest = 'css';
 var customjs = 'js/scripts.js';
 var jsSrc = 'js/src/**/*.js';
+var jsAlt = 'js/alt/**/*.js';
 var phpSrc = '**/*.php';
 var jsDest = 'js';
 
@@ -86,7 +88,6 @@ gulp.task('styles', function() {
         // require('node-bourbon').includePaths
       ],
     }))
-
     .on('error', handleError('styles'))
     .pipe(prefix('last 3 version', 'safari 5', 'ie 9', 'opera 12.1', 'ios 6', 'android 4')) // Adds browser prefixes (eg. -webkit, -moz, etc.)
     .pipe(pixrem())
@@ -111,13 +112,24 @@ SCRIPTS
 
 gulp.task('js', function() {
 
-      gulp.src(
-        [
-          'js/src/skip-link-focus-fix.js',
-          'js/src/responsive-nav.custom.js',
-          'js/src/scripts.js'
-        ])
+      gulp.src(jsSrc)
+        .pipe(include({
+          extensions: "js",
+          hardFail: true,
+          includePaths: [
+          // __dirname + "/bower_components/**",
+          __dirname + "/node_modules/**"
+        ]}))
         .pipe(concat('all.js'))
+        .pipe(uglify({preserveComments: false, compress: true, mangle: true}).on('error',function(e){console.log('\x07',e.message);return this.end();}))
+        .pipe(gulp.dest(jsDest))
+        .pipe(reload());
+});
+
+gulp.task('js-alt', function() {
+
+      gulp.src(jsAlt)
+        .pipe(concat('alt.js'))
         .pipe(uglify({preserveComments: false, compress: true, mangle: true}).on('error',function(e){console.log('\x07',e.message);return this.end();}))
         .pipe(gulp.dest(jsDest))
         .pipe(reload());
@@ -146,6 +158,7 @@ gulp.task('default', function() {
 
   gulp.watch(sassSrc, ['styles']);
   gulp.watch(jsSrc, ['js']);
+  gulp.watch(jsAlt, ['js-alt']);
   gulp.watch(phpSrc, ['php']);
 
 });

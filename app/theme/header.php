@@ -24,51 +24,10 @@
 
 <body <?php body_class(); ?>>
 <div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'air' ); ?></a>
+	<!-- <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'air' ); ?></a> -->
 
-	<header id="masthead" class="site-header">
-
-		<div class="container">
-
-			<div class="site-branding">
-				<?php
-				if ( is_front_page() && is_home() ) : ?>
-					<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-				<?php else : ?>
-					<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-				<?php
-				endif;
-
-				$description = get_bloginfo( 'description', 'display' );
-				if ( $description || is_customize_preview() ) : ?>
-					<p class="site-description screen-reader-text"><?php echo $description; /* WPCS: xss ok. */ ?></p>
-				<?php
-				endif; ?>
-			</div><!-- .site-branding -->
-
-			<button id="nav-toggle" class="nav-toggle" aria-controls="nav" aria-expanded="false"><span class="burger-icon"></span> <span id="nav-toggle-label"><?php esc_html_e( 'Menu', 'air' ); ?></span></button>
-
-			<nav id="nav" class="nav-collapse">
-
-				<?php
-					wp_nav_menu( array(
-						'theme_location'    => 'primary',
-						'container'       	=> false,
-						'depth'             => 4,
-						'menu_class'        => 'menu-items',
-						'menu_id' 					=> 'menu',
-						'echo'            	=> true,
-						'fallback_cb'       => 'wp_page_menu',
-						'items_wrap'      	=> '<ul class="%2$s" id="%1$s">%3$s</ul>',
-						'walker'            => new Air_Walker(),
-						)
-					);
-				?>
-
-			</nav><!-- #site-navigation -->
-
-		</div><!-- .container -->
-	</header><!-- #masthead -->
+	<?php get_template_part( 'template-parts/nav', 'header' ); ?>
 
 	<div id="content" class="site-content">
-    <?php get_template_part( 'template-parts/hero', get_post_type() ); ?>
+		<?php get_template_part( 'template-parts/hero', 'banner' ); ?>
+		

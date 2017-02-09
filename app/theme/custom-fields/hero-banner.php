@@ -14,7 +14,7 @@
           'page_title' => array(
               'type' => 'text',
               'required' => 1,
-              'placeholder' => '3 words MAX',
+              'placeholder' => '5 words MAX',
           ),
           'page_sub_title' => array(
               'type' => 'text',
@@ -68,6 +68,9 @@
               'type' => 'true_false',
               'ui' => 1,
               'instructions' => 'Would you like to colorize this Hero Banner?',
+              'wrapper' => array (
+                'width' => '30',
+              ),
               'depends' => array('custom_hero_banner'),
           ),
           'colorize_level' => array(
@@ -84,7 +87,7 @@
                 0 => '0.25',
               ),
               'wrapper' => array (
-                'width' => '50',
+                'width' => '60',
               ),
               'depends' => array('custom_hero_banner','colorize'),
           ),
@@ -104,9 +107,6 @@
               ),
               'default_value' => array (
                 0 => 'custom',
-              ),
-              'wrapper' => array (
-                'width' => '50',
               ),
               'depends' => array('custom_hero_banner','colorize'),
           ),

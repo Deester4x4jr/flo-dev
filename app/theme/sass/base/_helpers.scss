@@ -1,3 +1,16 @@
+// Uncomment for debugging
+// @include debug(white);
+
+@mixin no-buffer {
+  margin: 0;
+  padding: 0;
+
+  &:before,
+  &:after {
+    clear: both;
+  }
+}
+
 @mixin background-cover() {
   background: {
     size: cover;
@@ -45,7 +58,15 @@
   transform-style: preserve-3d;
 }
 
+@mixin un-align {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
 @mixin absolute-cover($dist) {
+  position: absolute;
   top: $dist;
   bottom: $dist;
   left: $dist;
@@ -68,4 +89,40 @@
     $remValues: append($remValues, convert-to-rem(nth($values, $i), $base-value));
   }
   @return $remValues;
+}
+
+@mixin one-up($selector, $join: 'insert') {
+
+  $sequences: &;
+  $new-sequences: ();
+  $new-sequence: '';
+  $new-selector: '';
+
+  @each $sequence in $sequences {
+
+    $parent: nth($sequence, -1);
+    $grandparent: nth($sequence, -2);
+
+    @if $join == 'append' { // Append the selector to the grandparent element: .grandparent.selector .parent
+
+      $new-selector: "#{$grandparent}#{$selector}";
+      $new-sequence: set-nth($sequence, -2, $new-selector);
+    } @elseif $join == 'prepend' { // Prepend the selector the the parent element: .grandparent .selector.parent
+
+      $new-selector: "#{$selector}#{$parent}";
+      $new-sequence: set-nth($sequence, -1, $new-selector);
+    } @else { // Insert the selector between the parent and grandparent elements: .grandparent .selector .parent
+
+      $new-selector: "#{$selector} #{$parent}";
+      $new-sequence: set-nth($sequence, -1, $new-selector);
+    }
+
+    $new-sequences: append($new-sequences, $new-sequence, comma);
+  }
+
+  // output: section.hero-section .hero-content-right article
+
+  @at-root #{$new-sequences} {
+    @content;
+  }
 }

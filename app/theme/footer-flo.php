@@ -11,19 +11,79 @@
 
 ?>
 
-	</div><!-- #content -->
+	</div>
 
-	<footer id="colophon" class="site-footer">
-		<div class="site-info">
-			<a href="<?php echo esc_url( __( 'http://wordpress.org/', 'air' ) ); ?>"><?php printf( esc_html__( 'Proudly powered by %s', 'air' ), 'WordPress' ); ?></a>
-			<span class="theme-info"><?php printf( esc_html__( 'Lightweight like %1$s itself. You are using version %2$s', 'air' ), '<i>air</i>', esc_attr( AIR_VERSION ) ); ?> &mdash; <a href="https://github.com/digitoimistodude/air"><?php echo file_get_contents( esc_url(  get_theme_file_uri( '/svg/github.svg' ) ) ); ?> GitHub</a></span>
-		</div><!-- .site-info -->
+	<!-- <div class="insta">
+		<?php echo do_shortcode('[fts_instagram instagram_id=254526950 pics_count=5 type=user profile_wrap=no super_gallery=yes image_size=250px icon_size=65px space_between_photos=1px hide_date_likes_comments=no center_container=yes image_stack_animation=yes]'); ?>
+	</div> -->
+
+	<footer class="site-footer">
+
+		<div class="container">
+
+			<!-- Left Side Footer Menu -->
+			<?php include_menu('footer_left', 1, 'underliner', 'footer-nav-left', 'nav-collapse'); ?>
+			<!-- End Left Side Footer Menu -->
+
+			<div class="site-info text-center">
+
+				<!-- Company Logo -->
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><img class="logo" src="http://flo.dev/wp-content/themes/flo-theme-2017/svg/logo.svg"></a>
+				<!-- End Company Logo -->
+
+				<!-- Made in Colorado -->
+				<div class="colorado">
+					<img src="<?php echo get_template_directory_uri() . '/svg/produced-in-colorado-1.svg'; ?>" />
+				</div>
+				<!-- End Made in Colorado -->
+
+				<!-- SoMe Icons -->
+				<ul class="some-list">
+					<li>
+						<a href="http://www.twitter.com" target="blank">
+							<span class="fa-stack fa-lg">
+					  		<i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+							</span>
+						</a>
+					</li>
+					<li>
+						<a href="http://www.instagram.com" target="blank">
+							<span class="fa-stack fa-lg">
+					  		<i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+							</span>
+						</a>
+					</li>
+					<li>
+						<a href="http://www.facebook.com" target="blank">
+							<span class="fa-stack fa-lg">
+					  		<i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+							</span>
+						</a>
+					</li>
+				</ul>
+				<!-- End SoMe Icons -->
+
+			</div><!-- .site-info -->
+
+			<!-- Right Side Footer Menu -->
+			<?php include_menu('footer_right', 1, 'underliner', 'footer-nav-left', 'nav-collapse text-right'); ?>
+			<!-- End Right Side Footer Menu -->
+
+			<div class="shoutout">
+				<i class="fa fa-code color-red"></i> with <i class="fa fa-laptop color-off-white"></i> by <a class="underliner" href="mailto:josh@thaw.io">thaw.io</a>
+			</div>
+
+		</div>
+
+		<div class="divider"></div>
+
 	</footer><!-- #colophon -->
+
 </div><!-- #page -->
 
 <?php wp_footer(); ?>
 
-<a href="#page" class="top"><span class="screen-reader-text"><?php echo esc_html_e('Back to top', 'air'); ?></span><?php echo file_get_contents( esc_url( get_theme_file_uri( '/svg/chevron-up.svg' ) ) ); ?></a>
+<!-- <a href="#page" class="top"><span class="screen-reader-text"><?php echo esc_html_e('Back to top', 'air'); ?></span><?php echo file_get_contents( esc_url( get_theme_file_uri( '/svg/chevron-up.svg' ) ) ); ?></a> -->
 
 </body>
 </html>

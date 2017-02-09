@@ -1,0 +1,187 @@
+// Side layout
+
+section {
+
+  &.hero-section {
+
+    background-color: transparent;
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+
+    &.small {
+      height: 70vh;
+    }
+
+    &.medium {
+      height: 85vh;
+    }
+
+    &.hero-content-center.banner {
+
+      height: 60vh;
+      padding: 0;
+
+      & article,
+      & .hero-image {
+
+        @include centered;
+        position: absolute;
+      }
+    }
+
+    // &.uncontained {
+    //   height: auto;
+    //
+    //   & article,
+    //   & .hero-image {
+    //
+    //     @include un-align;
+    //   }
+    //
+    //   &.hero-content-center article {
+    //
+    //     @include center();
+    //   }
+    // }
+
+    hr {
+      @include horizontal-align;
+      max-width: 50%;
+      opacity: 0.1;
+    }
+
+    strong {
+      display: inline-block;
+      margin: 0.5rem auto;
+      padding: 1rem 2rem;
+      width: auto;
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: $off-white;
+      background: $quinary;
+      border-radius: 300px;
+    }
+
+    & article,
+    & .hero-image {
+
+      @include vertical-align;
+    }
+
+    & article {
+
+      @include span(6/12);
+      @include move(-1/24);
+      text-align: center;
+
+      & .three-columns {
+
+        & .col {
+
+          @include column(1/3);
+        }
+      }
+
+      @include one-up('.hero-content-right','append') {
+
+        @include move(-11/24);
+      }
+
+      @include one-up('.hero-content-center','append') {
+
+        @include center(960px);
+        @include unmove;
+        position: relative;
+
+        @media (max-width: #{$container-ipad}) {
+
+          @include center(60%);
+        }
+
+        @media (max-width: #{$container-mobile}) {
+
+          @include center(80%);
+        }
+
+        p {
+
+          @include center();
+        }
+      }
+
+      p {
+
+        @include center(70%);
+      }
+
+      z-index: 4;
+    }
+
+    & .hero-image {
+
+      @include span(6/12);
+      text-align: center;
+      z-index: 1;
+
+      & i {
+        @include fluid-type(rem-calc($container-mobile), rem-calc($container-desktop), 10rem, 20rem);
+      }
+
+      & img {
+
+        @include horizontal-align;
+        max-width: 70vw;
+
+      }
+
+      @include one-up('.hero-content-right','append') {
+
+        @include move(6/12);
+      }
+
+      @include one-up('.hero-content-center','append') {
+
+        @include center();
+        @include centered();
+        position: absolute;
+        opacity: 0.15;
+
+        & img {
+
+          max-width: none;
+
+          @media (max-width: #{$container-ipad}){
+
+            max-width: none;
+            max-height: 70vh;
+            @include horizontal-align;
+          }
+        }
+      };
+    }
+
+    & .hero-film,
+    & .hero-color {
+
+      @include absolute-cover(-2px);
+    }
+
+    & .hero-film {
+
+      background: url($filmGrain);
+      z-index: 3;
+    }
+
+    & .hero-color {
+
+      background-position: center;
+      z-index: 2;
+
+      &.hero-radial {
+
+        background-size: 120% 150%;
+      }
+    }
+  }
+}

@@ -1,7 +1,15 @@
 // General styles that repeat everywhere
 
-// Unccomment for jeet debug mode;
-// @include debug;
+// Uncomment for debugging
+// @include debug(white);
+
+// Loader graphic
+div.loader {
+  background: url('../images/loader.gif');
+  background-size: cover;
+  @include absolute-cover(40%);
+  z-index: 10000;
+}
 
 // Default shade on top of slides
 .shade {
@@ -13,4 +21,161 @@
   left: 0;
   z-index: 0;
   opacity: .1; // Play around with this, depending on your layout .33 is usually good amount
+}
+
+// Text Modifiers: Transforms
+.uppercase {
+  text-transform: uppercase !important;
+  & *,
+  &:before,
+  &:after {
+    text-transform: uppercase !important;
+  }
+}
+.lowercase {
+  text-transform: lowercase !important;
+  & *,
+  &:before,
+  &:after {
+    text-transform: lowercase !important;
+  }
+}
+// Text Modifiers: Alignment
+.text-center {
+  text-align: center !important;
+  & *,
+  &:before,
+  &:after {
+    text-align: center !important;
+  }
+}
+.text-left {
+  text-align: left !important;
+  & *,
+  &:before,
+  &:after {
+    text-align: left !important;
+  }
+}
+.text-right {
+  text-align: right !important;
+  & *,
+  &:before,
+  &:after {
+    text-align: right !important;
+  }
+}
+
+// Text Modifiers: Color
+.color-white {
+  color: $white !important;
+  & *,
+  &:before,
+  &:after {
+    color: $white !important;
+  }
+}
+.color-off-white {
+  color: $off-white !important;
+  & *,
+  &:before,
+  &:after {
+    color: $off-white !important;
+  }
+}
+.color-black {
+  color: $black !important;
+  & *,
+  &:before,
+  &:after {
+    color: $black !important;
+  }
+}
+.color-off-black {
+  color: $off-black !important;
+  & *,
+  &:before,
+  &:after {
+    color: $off-black !important;
+  }
+}
+.color-green {
+  color: $primary !important;
+  & *,
+  &:before,
+  &:after {
+    color: $primary !important;
+  }
+}
+.color-red {
+  color: $tertiary !important;
+  & *,
+  &:before,
+  &:after {
+    color: $tertiary !important;
+  }
+}
+.color-purple {
+  color: $quinary !important;
+  & *,
+  &:before,
+  &:after {
+    color: $quinary !important;
+  }
+}
+.color-gray {
+  color: $accent !important;
+  & *,
+  &:before,
+  &:after {
+    color: $accent !important;
+  }
+}
+
+// Layout Modifiers: Margin
+.no-margin {
+  margin: none;
+}
+
+.color-btns {
+  @include horizontal-align;
+  .color-button {
+    @include column(1/5, $cycle: 5);
+    float: left !important;
+    width: 10rem;
+    height: 10rem;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    margin-bottom: 2rem;
+    box-shadow: 0 0 50px $color-text inset;
+  }
+}
+
+// To hide something but keep its DOM size
+.hide {
+
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  &.show {
+    opacity: 1;
+  }
+}
+
+// Adding some font-awesome modifiers
+.fa-stack-3x {
+  font-size: 3rem;
+}
+.fa-stack-4x {
+  font-size: 4rem;
+}
+.fa-stack-5x {
+  font-size: 5rem;
+}
+.fa-stack-3x,
+.fa-stack-4x,
+.fa-stack-5x {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
 }

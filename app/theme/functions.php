@@ -15,10 +15,10 @@ define( 'AIR_VERSION', '2.0.0' );
 /**
  * WooCommerce support
  */
-add_action( 'after_setup_theme', 'woocommerce_support' );
 function woocommerce_support() {
     add_theme_support( 'woocommerce' );
 }
+add_action( 'after_setup_theme', 'woocommerce_support' );
 
 /**
  * Requires
@@ -43,6 +43,7 @@ function disable_wp_emojicons() {
   add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
 }
 add_action( 'init', 'disable_wp_emojicons' );
+
 // Disable TinyMCE emojicons
 function disable_emojicons_tinymce( $plugins ) {
   if ( is_array( $plugins ) ) {
@@ -77,7 +78,7 @@ add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list'
 /**
  * Set a locale for Finnish language
  */
-setlocale( LC_ALL, 'fi_FI.utf8' );
+// setlocale( LC_ALL, 'fi_FI.utf8' );
 
 /*
 * Clean up WP admin bar
@@ -109,22 +110,107 @@ add_action('admin_menu', 'remove_admin_menu_links', 999);
 /**
 * Hide WP updates nag
 */
-add_action( 'admin_menu', 'air_wphidenag' );
 function air_wphidenag() {
    remove_action( 'admin_notices', 'update_nag', 3 );
 }
+add_action( 'admin_menu', 'air_wphidenag' );
 
 /**
  * Editable navigation menus.
  */
 register_nav_menus( array(
-	'primary' => __( 'Primary Menu', 'air' ),
+	'header_left' => __( 'Header Left', 'air'),
+  'header_right' => __( 'Header Right', 'air'),
+  'footer_left' => __( 'Footer Left', 'air'),
+  'footer_right' => __( 'Footer Right', 'air'),
 ) );
+
+/**
+ * Limit number of nav menu items on menus
+ */
+function my_nav_menu_objects( $sorted_menu_items, $args ) {
+
+    $menu_limits = array(
+      'header_left' => 2,
+      'header_right' => 2,
+      'footer_left' => 4,
+      'footer_right' => 4,
+    );
+
+    if ( array_key_exists($args->theme_location, $menu_limits) ) {
+      $menu_limit = $menu_limits[$args->theme_location];
+    } else {
+      return $sorted_menu_items;
+    }
+
+    $unset_top_level_menu_item_ids = array();
+    $array_unset_value = 1;
+    $count = 1;
+
+    foreach ( $sorted_menu_items as $sorted_menu_item ) {
+
+        // unset top level menu items if over count 4
+        if ( 0 == $sorted_menu_item->menu_item_parent ) {
+            if ( $count > $menu_limit ) {
+                unset( $sorted_menu_items[$array_unset_value] );
+                $unset_top_level_menu_item_ids[] = $sorted_menu_item->ID;
+            }
+            $count++;
+        }
+
+        // unset child menu items of unset top level menu items
+        if ( in_array( $sorted_menu_item->menu_item_parent, $unset_top_level_menu_item_ids ) )
+            unset( $sorted_menu_items[$array_unset_value] );
+
+        $array_unset_value++;
+    }
+
+    return $sorted_menu_items;
+}
+add_filter( 'wp_nav_menu_objects', 'my_nav_menu_objects', 10, 2 );
+
+/**
+ * Helper function to display a menu
+ */
+function include_menu( $location = false, $depth = 0, $class = false, $nav_id = false, $nav_class = false ) {
+
+  if ( !$location ) {
+    throw new Exception('theme_location is a required field for displaying a menu.');
+  }
+
+  $vars = array(
+    'theme_location'      => $location,
+    'menu_class'          => $class,
+    'depth'               => $depth,
+    'container_id'        => $nav_id,
+    'container_class'     => $nav_class,
+  );
+
+  foreach ($vars as $k=>$v) {
+    if ( !$v ) {
+      unset($vars[$k]);
+    }
+  }
+
+  wp_nav_menu($vars + array(
+      'container'       	=> 'nav',
+      'echo'            	=> true,
+      'fallback_cb'       => 'wp_page_menu',
+      'items_wrap'      	=> '<ul class="%2$s">%3$s</ul>',
+      'walker'            => new Flo_Walker(),
+    )
+  );
+}
 
 /**
  * Custom navigation walker
  */
-require get_template_directory() . '/nav.php';
+// require get_template_directory() . '/nav.php';
+
+/**
+ * Custom navigation walker
+ */
+require get_template_directory() . '/flo-walker.php';
 
 /**
  * Custom comments
@@ -188,9 +274,6 @@ add_action( 'wp_head', 'air_pingback_header' );
  * Custom uploads folder media/ instead of default content/uploads/.
  * Comment these out if you want to set up media library folder in wp-admin.
  */
-update_option( 'upload_path', untrailingslashit( str_replace( 'wp', 'media', ABSPATH ) ) );
-update_option( 'upload_url_path', untrailingslashit( str_replace( 'wp', 'media', get_site_url() ) ) );
-define( 'uploads', '' . 'media' );
 add_filter( 'option_uploads_use_yearmonth_folders', '__return_false', 100 );
 
 if ( ! function_exists( 'air_entry_footer' ) ) :
@@ -273,12 +356,74 @@ function load_custom_field_groups() {
 add_action('acf/init', 'load_custom_field_groups');
 
 
+////////////////////////
+// Hide Editor Panels //
+////////////////////////
+
+/*
+*
+*   Function:   hide_editor_panels
+*   Usage:      Setup which post types will have which features hidden
+*   Features:   'title'
+*               'editor' (content)
+*               'author'
+*               'thumbnail' (featured image)
+*               'excerpt'
+*               'trackbacks'
+*               'custom-fields'
+*               'comments'
+*               'revisions'
+*               'page-attributes' (template and menu order)
+*               'post-formats'
+*
+*/
+function hide_editor_panels() {
+
+  $to_hide = array(
+    'page' => array(
+      'editor',
+      'author',
+      'trackbacks',
+      'custom-fields',
+      'comments',
+      'post-formats',
+    ),
+    'post' => array(
+      // 'editor',
+      'custom-fields',
+    ),
+  );
+
+  foreach ($to_hide as $type => $features) {
+    foreach ($features as $feature) {
+      remove_post_type_support($type, $feature);
+    }
+  }
+
+  // Get the Post ID.
+  // $post_id = $_GET['post'] ? $_GET['post'] : $_POST['post_ID'] ;
+
+  // if( !isset( $post_id ) ) return;
+
+  // Hide the editor on the page titled 'Homepage'
+  // $homepgname = get_the_title($post_id);
+  // if($homepgname == 'Homepage'){
+    // remove_post_type_support('page', 'editor');
+  // }
+
+  // Hide the editor on a page with a specific page template
+  // Get the name of the Page Template file.
+  // $template_file = get_post_meta($post_id, '_wp_page_template', true);
+  // if($template_file == 'my-page-template.php'){ // the filename of the page template
+    // remove_post_type_support('page', 'editor');
+  // }
+}
+add_action( 'admin_head', 'hide_editor_panels' );
+
 
 //////////////////////////
 // ACF Helper Functions //
 //////////////////////////
-
-
 
 /*
 *
@@ -297,26 +442,65 @@ function make_label($name) {
 
 /*
 *
+*   Function:   construct_acf_layouts
+*   Accepts:    $arr (array)
+*   Usage:      Construct a properly formatted array of layouts for our acf Custom Field Group
+*   Returns:    array
+*
+*/
+function construct_acf_layouts($arr) {
+
+  // echo '<pre>';
+  foreach ($arr as $k=>$v) {
+
+    $v = array(
+      'key' => get_short_hash($k),
+      'name' => $k,
+      'label' => make_label($k),
+      'display' => 'row',
+      'sub_fields' => construct_acf_fields($v,$k),
+    );
+
+    // Push the new dependency to $arr
+    $arr[] = $v;
+
+    // Cleanup $arr
+    unset($arr[$k]);
+  }
+
+  // Return our newly constructed dependencies
+  return $arr;
+}
+
+
+
+/*
+*
 *   Function:   construct_acf_dependencies
 *   Accepts:    $arr (array)
 *   Usage:      Construct a properly formatted array of dependency rules for our acf Custom Field Group
 *   Returns:    array
 *
 */
-function construct_acf_dependencies($arr) {
+function construct_acf_dependencies($arr,$mod = false) {
 
   foreach ($arr as $k=>$v) {
 
+    // If there is a modifier, apply it
+    $modded = ( is_array($v) ? ( $mod ? $mod.'_'.$v[0] : $v[0]) : ( $mod ? $mod.'_'.$v : $v) );
+
     // if dependency is_array, then construct, else construct with defaults ( == '1')
     if (is_array($v)) {
+
       $v = array(
-        'field' => 'field_' . get_short_hash($v[0]),
+        'field' => 'field_' . get_short_hash($modded),
         'operator' => $v[1],
         'value' => $v[2],
       );
     } else {
+
       $v = array(
-        'field' => 'field_' . get_short_hash($v),
+        'field' => 'field_' . get_short_hash($modded),
         'operator' => '==',
         'value' => '1',
       );
@@ -346,7 +530,7 @@ function construct_acf_dependencies($arr) {
 *   Returns:    array
 *
 */
-function construct_acf_fields($arr) {
+function construct_acf_fields($arr,$mod = false) {
 
   foreach ($arr as $k=>$v) {
 
@@ -358,13 +542,21 @@ function construct_acf_fields($arr) {
     // Set our field name
     $v = array('name' => $k) + $v;
 
+    // Apply a modifier if present
+    $modded = ( $mod ? $mod.'_'.$k : $k);
+
     // Generate our 'unique' key for this field
-    $v = array('key' => 'field_' . get_short_hash($k)) + $v;
+    $v = array('key' => 'field_' . get_short_hash($modded)) + $v;
 
     // If there are dependencies, construct them properly
     if (isset($v['depends'])) {
-      $v['conditional_logic'] = construct_acf_dependencies($v['depends']);
+      $v['conditional_logic'] = construct_acf_dependencies($v['depends'], $mod);
       unset($v['depends']);
+    }
+
+    // If there are layouts, construct them properly
+    if (isset($v['layouts'])) {
+      $v['layouts'] = construct_acf_layouts($v['layouts']);
     }
 
     // Push our new array of fields to $arr
@@ -374,6 +566,7 @@ function construct_acf_fields($arr) {
     unset($arr[$k]);
   }
 
+  // d($arr);
   // Return our new array of fields
   return $arr;
 }
@@ -420,6 +613,23 @@ function construct_acf_locations($arr) {
 *   Accepts:    $arr (array)
 *   Usage:      Construct a properly formatted array for creating acf Custom Fields
 *   Returns:    array
+*   Samples:    'hide_on_screen' => array (
+*                 0 => 'permalink',
+*                 1 => 'the_content',
+*                 2 => 'excerpt',
+*                 3 => 'custom_fields',
+*                 4 => 'discussion',
+*                 5 => 'comments',
+*                 6 => 'revisions',
+*                 7 => 'slug',
+*                 8 => 'author',
+*                 9 => 'format',
+*                 10 => 'page_attributes',
+*                 11 => 'featured_image',
+*                 12 => 'categories',
+*                 13 => 'tags',
+*                 14 => 'send-trackbacks',
+*                ),
 *
 */
 function construct_acf_array($arr) {
@@ -449,3 +659,29 @@ function construct_acf_array($arr) {
 
   return $arr;
 }
+
+///////////////////////////
+// Maps Helper Functions //
+///////////////////////////
+
+function simple_locator_infowindow_flo($infowindow) {
+
+  $id = $title = '';
+  $dom = new DOMDocument();
+  $dom->loadHTML($infowindow);
+
+  $tmp = $dom->getElementsByTagName("a");
+
+  foreach ($tmp as $v) {
+    $id = $v->getAttribute("data-location-id");
+  }
+
+  $tmp = $dom->getElementsByTagName("h4");
+
+  foreach ($tmp as $v) {
+    $title = trim(preg_replace("/[\r\n]+/", " ", $v->nodeValue));
+  }
+
+  $infowindow = '<h4 class="awesome">'.$title.'</h4>'.'<a href="#" onClick="event.preventDefault(); get_directions('.$id.');">Get Directions - <i class="fa fa-fw fa-map-o"></i></a>';
+  return $infowindow;
+} add_filter('simple_locator_infowindow','simple_locator_infowindow_flo');

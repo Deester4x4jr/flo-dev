@@ -3,6 +3,11 @@
 // Reset & grid
 @import 'normalize.css/normalize';
 @import 'jeet/scss/index';
+@import 'font-awesome/scss/font-awesome';
+
+// 3rd Party
+@import 'sweetalert/dist/sweetalert';
+@import '../features/opentip';
 
 // Theme options
 @import 'config';
@@ -11,23 +16,27 @@
 @import 'helpers';
 @import 'accessibility';
 
+// Global features
+@import '../features/top';
+@import '../features/gallery';
+@import '../features/hero-effects';
+@import '../features/contact-bubble';
+@import '../features/sold-in';
+
 // Structure
 @import '../layout/general';
 @import '../layout/typography';
 @import '../layout/containers';
 @import '../layout/site-header';
+@import '../layout/hero-banner';
+@import '../layout/hero-section';
+@import '../layout/cta-section';
 @import '../layout/site-footer';
 @import '../layout/forms';
 @import '../layout/navigation';
 //@import '../layout/sidebar';
 
-// Global features
-@import '../features/top';
-@import '../features/gallery';
-@import '../features/hero-effects';
-
 // Views
-@import '../views/hero';
 @import '../views/page';
 @import '../views/blog';
 @import '../views/single';

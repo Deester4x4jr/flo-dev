@@ -1,9 +1,13 @@
 @charset 'utf-8';
 @import 'burger';
 
+// Uncomment for debugging
+// @include debug(white);
+
 //! responsive-nav.js 1.0.39 by @viljamis
 // sassified by @rolle
 #nav {
+  text-align: center;
   clip: rect(0 0 0 0);
   max-height: 0;
   position: absolute;
@@ -425,4 +429,31 @@
 button {
   appearance: button;
   cursor: pointer;
+}
+
+// Underline links for header nav
+.underliner a {
+
+  position: relative;
+  padding-bottom: 0.25rem;
+
+  &:hover {
+
+    &:after {
+
+      transform: scaleX(1.2);
+      box-shadow: 0 8px 20px -8px rgba(0,0,0,0.625);
+    }
+  }
+
+  &:after {
+
+    @include absolute-cover(0);
+    display: block;
+    content: "";
+    border-bottom: 1px solid $primary;
+    transform: scaleX(0);
+    transition: 0.2s all ease-in-out;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.625);
+  }
 }

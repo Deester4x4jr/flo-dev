@@ -52,8 +52,10 @@ $url: web-fonts-url(
     )
   ),
   ('Source Sans Pro':
-    ('700',
-     '700 italic'
+    ('600',
+     '700',
+     '800',
+     '900'
     )
   )
 );
@@ -198,9 +200,12 @@ body {
     }
 
     p {
-      margin-top: 29px;
-      margin-bottom: 29px;
-      line-height: $font-base-line-height;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      // line-height: $font-base-line-height;
+      font-weight: 200;
+      line-height: 1.5;
+      @include fluid-type(rem-calc($container-mobile), rem-calc($container-desktop), 1.25rem, 1.5rem);
 
       &:first-child {
         margin-top: 0;
@@ -208,6 +213,11 @@ body {
 
       &:last-child {
         margin-bottom: 0;
+      }
+
+      &.small {
+
+        @include fluid-type(rem-calc($container-mobile), rem-calc($container-desktop), 0.5rem, 1rem);
       }
     }
 
@@ -237,7 +247,39 @@ body {
     h1,
     h2 {
       color: white;
-      text-shadow: 0.125rem 0.125rem 0.125rem rgba(0,0,0,0.5);
+      text-shadow: rem-calc(2px) rem-calc(2px) rem-calc(2px) rgba(0,0,0,0.35);
+      text-transform: uppercase;
+    }
+
+    h3 {
+
+      position: relative;
+      text-transform: uppercase;
+      line-height: 1;
+
+      &:before,
+      &:after {
+
+        background: #020202;
+        position: absolute;
+        content: "";
+        width: 12%;
+        height: 1px;
+        left: 50%;
+        bottom: 0;
+        transform-origin: 50% 50%;
+        opacity: 0.35;
+      }
+
+      &:before {
+
+        transform: translateX(-50%) rotate(25deg);
+      }
+
+      &:after {
+
+        transform: translateX(-50%) rotate(-25deg);
+      }
     }
 
     // Define heading scales
@@ -279,23 +321,38 @@ body {
       h1,
       .h1 {
         // @include responsive-font(3.2vw, 32px, 68px);
-        @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), 2.75rem, 5rem);
-        @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), 0.35rem, 1.25rem, margin-bottom);
-        font-weight: $h1-weight;
-        text-transform: uppercase;
+        @include fluid-type(rem-calc($container-mobile), rem-calc($container-desktop), 3.25rem, 7rem);
+        @include fluid-type(rem-calc($container-mobile), rem-calc($container-desktop), 0.35rem, 1.5rem, margin-bottom);
+
+        &,
+        & a {
+          font-weight: $h1-weight;
+        }
       }
 
       h2,
       .h2 {
         @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), 1.35rem, 2rem);
-        font-weight: $h2-weight;
         margin: 0;
+
+        &,
+        & a{
+          font-weight: $h2-weight;
+        }
       }
 
       h3,
       .h3,
       .gform_wrapper h3.gform_title {
-        @include responsive-font(1.6vw, 21px, 34px);
+        @include fluid-type(rem-calc($container-mobile), rem-calc($container-desktop), 2.25rem, 5rem);
+        margin-bottom: 0.5rem;
+        padding-bottom: 2rem;
+        margin: 0;
+
+        &,
+        & a {
+          font-weight: $h3-weight;
+        }
       }
 
       h4,
@@ -466,8 +523,7 @@ body {
     }
 
     // Italic.
-    em,
-    i {
+    em{
       font-style: italic;
     }
 
@@ -511,8 +567,8 @@ body {
       clear: both;
       border: 0 none;
       position: relative;
-      margin-top: 3rem;
-      padding-bottom: 3rem;
+      margin-top: 0;
+      padding-bottom: 0;
       margin: 0;
 
       p {
@@ -525,10 +581,10 @@ body {
         overflow: visible;
       }
 
-      @media(min-width: $container-ipad) {
-        margin-top: 4rem;
-        padding-bottom: 4rem;
-      }
+      // @media(min-width: $container-ipad) {
+      //   margin-top: 4rem;
+      //   padding-bottom: 4rem;
+      // }
 
       &:before {
         content: '';
@@ -637,8 +693,20 @@ html * {
 a {
   color: $color-links;
   text-decoration: none;
+  transition: 0.2s color ease;
+  font-weight: $font-weight-medium;
 
   &:hover {
     color: $color-hover;
   }
+
+  // .content-area & {
+  //
+  //   color: $color-links-alt;
+  //
+  //   &:hover {
+  //
+  //     color: darken($color-links-alt, 30);
+  //   }
+  // }
 }
