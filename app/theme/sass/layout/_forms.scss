@@ -198,3 +198,85 @@ body {
     width: 100%;
   }
 }
+
+.swal2-modal {
+
+  button {
+
+    &:focus,
+    &:active,
+    &:hover {
+      outline: none;
+      box-shadow: 0 0 8px fade-out($accent,0.5);
+    }
+
+    &.swal2-confirm {
+
+      &:focus,
+      &:active,
+      &:hover {
+        background-color: $primary !important;
+      }
+    }
+
+    &.swal2-loading {
+        background-color: inherit !important;
+    }
+
+    &.swal2-cancel {
+
+      &:focus,
+      &:active,
+      &:hover {
+        background-color: $accent !important;
+      }
+    }
+  }
+
+  form {
+
+    margin-top: 2rem;
+
+    & input,
+    & textarea {
+
+      @include column(1/1);
+      font-family: $font-base;
+      font-weight: $font-weight-fine;
+      border: none;
+      border-bottom: 2px solid;
+      border-color: fade-out($accent,0.85);
+      margin-bottom: 2rem;
+      padding: 1rem;
+      text-align: center;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+
+        outline: none;
+        border-color: $hybrid;
+        border-bottom-width: 2px;
+      }
+
+      &.eval {
+
+        border-color: $tertiary;
+        box-shadow: 0 2px 2px -2px fade-out($tertiary,0.5);
+      }
+    }
+
+    & input {
+
+      &.half {
+
+        @include column(1/2);
+      }
+    }
+
+    & textarea {
+
+      text-align: left;
+      margin-top: 2rem;
+    }
+  }
+}

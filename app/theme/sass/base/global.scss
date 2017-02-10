@@ -6,7 +6,7 @@
 @import 'font-awesome/scss/font-awesome';
 
 // 3rd Party
-@import 'sweetalert/dist/sweetalert';
+@import 'sweetalert2/dist/sweetalert2';
 @import '../features/opentip';
 
 // Theme options
@@ -22,6 +22,7 @@
 @import '../features/hero-effects';
 @import '../features/contact-bubble';
 @import '../features/sold-in';
+@import '../features/some-widget';
 
 // Structure
 @import '../layout/general';

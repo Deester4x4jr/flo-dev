@@ -13,10 +13,6 @@
 
 </div>
 
-<!-- <div class="insta">
-	<?php echo do_shortcode('[fts_instagram instagram_id=254526950 pics_count=5 type=user profile_wrap=no super_gallery=yes image_size=250px icon_size=65px space_between_photos=1px hide_date_likes_comments=no center_container=yes image_stack_animation=yes]'); ?>
-</div> -->
-
 <footer class="site-footer">
 
 	<div class="container">

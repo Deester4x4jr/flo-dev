@@ -1,3 +1,3 @@
-jQuery(document).ready(function() {
-  Ellipsis();
-});
+// jQuery(document).ready(function() {
+//   Ellipsis();
+// });

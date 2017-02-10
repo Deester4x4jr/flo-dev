@@ -96,19 +96,24 @@
             'return_format' => 'value',
             'instructions' => 'Choose the color(s) you would like to use',
             'choices' => array (
-                // Need to customize these with color combo options
-                'green' => 'Solid - Green',
-                'blue' => 'Solid - Blue',
-                'aqua' => 'Gradient - Aqua',
-                'heat' => 'Gradient - Heat',
+                'hybrid' => 'Solid - Hybrid',
+                'sativa' => 'Solid - Sativa',
+                'indica' => 'Solid - Indica',
+                'darkblue' =>'Solid - Dark Blue',
+                'lightgreen' => 'Solid - Pastel Green',
+                'smoke' => 'Solid - Erie Black',
+                'hybridgradient' => 'Gradient - Hybrid',
+                'sativagradient' => 'Gradient - Sativa',
+                'indicagradient' => 'Gradient - Indica',
+                'heat' => 'Gradient - Miami Heat',
                 'midnight' => 'Gradient - Midnight',
                 'charcoal' => 'Gradient - Charcoal',
                 'custom' => 'Custom',
-              ),
-              'default_value' => array (
+            ),
+            'default_value' => array (
                 0 => 'custom',
-              ),
-              'depends' => array('custom_hero_banner','colorize'),
+            ),
+            'depends' => array('custom_hero_banner','colorize'),
           ),
           'colorize_color_one' => array(
               'label' => 'Color One',

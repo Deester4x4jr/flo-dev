@@ -73,6 +73,10 @@
   right: $dist;
 }
 
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
 @function convert-to-rem($value, $base-value: $rem-base) {
   $value: strip-unit($value) / strip-unit($base-value) * 1rem;
   @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
@@ -124,5 +128,38 @@
 
   @at-root #{$new-sequences} {
     @content;
+  }
+}
+
+// Truly Fluid Typography Mixin
+// Examples:    @include fluid-type(37.5rem, 80rem, 2.5rem, 5rem);
+//              @include fluid-type(rem-calc(700px), 80rem, 1.5rem, 3rem, padding-bottom);
+
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size, $props: font-size) {
+
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+        @each $prop in $props {
+            #{$prop}: $min-font-size;
+        }
+        @media screen and (min-width: $min-vw) {
+            @each $prop in $props {
+                #{$prop}: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+            }
+        }
+
+        @media screen and (min-width: $max-vw) {
+            @each $prop in $props {
+                #{$prop}: $max-font-size;
+            }
+        }
+    }
+  } @else {
+    @error "Detected mixed units. Please use the same units for all parameters. " + $u1 +", " + $u2 + ", " + $u3 +", "+ $u4;
   }
 }

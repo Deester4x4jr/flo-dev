@@ -13,9 +13,7 @@
 
 	</div>
 
-	<!-- <div class="insta">
-		<?php echo do_shortcode('[fts_instagram instagram_id=254526950 pics_count=5 type=user profile_wrap=no super_gallery=yes image_size=250px icon_size=65px space_between_photos=1px hide_date_likes_comments=no center_container=yes image_stack_animation=yes]'); ?>
-	</div> -->
+	<?php echo ( get_field('display_feed') ? do_shortcode('[instagram-feed id="2960020102"]') : $noop ); ?>
 
 	<footer class="site-footer">
 
@@ -70,7 +68,7 @@
 			<!-- End Right Side Footer Menu -->
 
 			<div class="shoutout">
-				<i class="fa fa-code color-red"></i> with <i class="fa fa-laptop color-off-white"></i> by <a class="underliner" href="mailto:josh@thaw.io">thaw.io</a>
+				<a href="mailto:josh@thaw.io"><i class="fa fa-code color-red"></i> with <i class="fa fa-coffee color-off-white"></i> by thaw.io</a>
 			</div>
 
 		</div>

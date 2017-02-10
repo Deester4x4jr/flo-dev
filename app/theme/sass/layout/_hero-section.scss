@@ -17,6 +17,14 @@ section {
       height: 85vh;
     }
 
+    &:last-child {
+
+      &.banner {
+
+        clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 100%);
+      }
+    }
+
     &.hero-content-center.banner {
 
       height: 60vh;
@@ -26,24 +34,21 @@ section {
       & .hero-image {
 
         @include centered;
+        width: 100%;
         position: absolute;
       }
-    }
 
-    // &.uncontained {
-    //   height: auto;
-    //
-    //   & article,
-    //   & .hero-image {
-    //
-    //     @include un-align;
-    //   }
-    //
-    //   &.hero-content-center article {
-    //
-    //     @include center();
-    //   }
-    // }
+      &.fluid-height {
+        height: auto;
+        padding: 5rem 0;
+
+        & article,
+        & .hero-image {
+
+          @include un-align;
+        }
+      }
+    }
 
     hr {
       @include horizontal-align;
@@ -181,6 +186,58 @@ section {
       &.hero-radial {
 
         background-size: 120% 150%;
+      }
+    }
+
+    @media(max-width: $grid-base-size) {
+      //
+    }
+
+    @media (max-width: $container-mobile) {
+
+      height: auto;
+      padding: 5rem 0;
+
+      &.hero-content-left,
+      &.hero-content-right,
+      &.hero-content-center {
+
+        & .hero-image {
+
+          @include center();
+          @include centered();
+          position: absolute !important;
+          height: 100% !important;
+          opacity: 0.15;
+
+          & img {
+
+            max-height: 85%;
+            max-width: none;
+            display: block;
+            left: 0;
+            @include vertical-align;
+          }
+        }
+
+        & article {
+
+          @include center(98%);
+          @include unmove;
+          top: 0;
+          transform: none;
+          position: relative;
+
+          & p {
+
+            font-weight: $font-weight-light;
+          }
+
+          & * {
+
+            text-shadow: 1px 1px 0px white !important;
+          }
+        }
       }
     }
   }

@@ -28,7 +28,11 @@ section.banner {
       &.rec,
       &.jar,
       &.liquid,
-      &.vape {
+      &.vape,
+      &.indica,
+      &.sativa,
+      &.hybrid,
+      &.xact-xpose {
         margin-right: 0;
         border-radius: 100%;
         width: 3rem;
@@ -63,6 +67,22 @@ section.banner {
       &.vape {
         background-image: url('/wp-content/themes/flo-theme-2017/svg/vape.svg');
         background-color: $quinary;
+      }
+      &.indica {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/indica.svg');
+        background-color: $indica;
+      }
+      &.sativa {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/sativa.svg');
+        background-color: $sativa;
+      }
+      &.hybrid {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/hybrid.svg');
+        background-color: $hybrid;
+      }
+      &.xact-xpose {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/xact_xpose.svg');
+        background-color: $accent;
       }
     }
   }

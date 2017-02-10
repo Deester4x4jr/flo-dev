@@ -1,5 +1,5 @@
 // Setup some objects
-var form = jQuery('#map-form');
+var theForm = jQuery('#map-form');
 var theMap = jQuery('#map-box');
 var submit = jQuery('.wpslsubmit');
 var mapResults = jQuery('#results-box');
@@ -17,7 +17,7 @@ function check_maps(){
     jQuery('#page-loader').fadeOut("fast",function() {
       jQuery('#page-loader').remove();
       theMap.addClass('show');
-      form.addClass('show');
+      theForm.addClass('show');
       jQuery('body').addClass('loaded');
     });
   }
@@ -117,8 +117,8 @@ function wpsl_no_results( location, active_form ) {
 // Do stuff before the form gets submitted
 function wpsl_before_submit(active_form, formelements) {
 
-  if (!form.hasClass('map-form-left')) {
-    form.addClass('map-form-left');
+  if (!theForm.hasClass('map-form-left')) {
+    theForm.addClass('map-form-left');
   }
   if (dispensaries instanceof jQuery) {
     dispensaries.off('click');

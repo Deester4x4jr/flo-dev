@@ -74,47 +74,6 @@ $url: web-fonts-url(
 // $mod_1: 1.125;
 // $mod_2: 1.250;
 
-
-// Fluid Type Mixin
-
-@function strip-unit($value) {
-  @return $value / ($value * 0 + 1);
-}
-
-
-// Truly Fluid Typography Mixin
-// Examples:    @include fluid-type(37.5rem, 80rem, 2.5rem, 5rem);
-//              @include fluid-type(rem-calc(700px), 80rem, 1.5rem, 3rem, padding-bottom);
-
-@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size, $props: font-size) {
-
-  $u1: unit($min-vw);
-  $u2: unit($max-vw);
-  $u3: unit($min-font-size);
-  $u4: unit($max-font-size);
-
-  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
-    & {
-        @each $prop in $props {
-            #{$prop}: $min-font-size;
-        }
-        @media screen and (min-width: $min-vw) {
-            @each $prop in $props {
-                #{$prop}: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
-            }
-        }
-
-        @media screen and (min-width: $max-vw) {
-            @each $prop in $props {
-                #{$prop}: $max-font-size;
-            }
-        }
-    }
-  } @else {
-    @error "Detected mixed units. Please use the same units for all parameters. " + $u1 +", " + $u2 + ", " + $u3 +", "+ $u4;
-  }
-}
-
 /*********************************
  *  End Fluid Typography Mixins  *
 *********************************/
@@ -257,29 +216,29 @@ body {
       text-transform: uppercase;
       line-height: 1;
 
-      &:before,
-      &:after {
-
-        background: #020202;
-        position: absolute;
-        content: "";
-        width: 12%;
-        height: 1px;
-        left: 50%;
-        bottom: 0;
-        transform-origin: 50% 50%;
-        opacity: 0.35;
-      }
-
-      &:before {
-
-        transform: translateX(-50%) rotate(25deg);
-      }
-
-      &:after {
-
-        transform: translateX(-50%) rotate(-25deg);
-      }
+      // &:before,
+      // &:after {
+      //
+      //   background: #020202;
+      //   position: absolute;
+      //   content: "";
+      //   width: 12%;
+      //   height: 1px;
+      //   left: 50%;
+      //   bottom: 0;
+      //   transform-origin: 50% 50%;
+      //   opacity: 0.35;
+      // }
+      //
+      // &:before {
+      //
+      //   transform: translateX(-50%) rotate(25deg);
+      // }
+      //
+      // &:after {
+      //
+      //   transform: translateX(-50%) rotate(-25deg);
+      // }
     }
 
     // Define heading scales
@@ -563,48 +522,80 @@ body {
     }
 
     // Quotes.
-    blockquote {
-      clear: both;
-      border: 0 none;
+    // blockquote {
+    //   clear: both;
+    //   border: 0 none;
+    //   position: relative;
+    //   margin-top: 0;
+    //   padding-bottom: 0;
+    //   margin: 0;
+    //
+    //   p {
+    //     @include responsive-font(2vw, 17px, 25px, 25px);
+    //     opacity: .5;
+    //     font-style: italic;
+    //     font-family: $font-base;
+    //     margin-bottom: 0;
+    //     position: relative;
+    //     overflow: visible;
+    //   }
+    //
+    //   &:before {
+    //     content: '';
+    //     display: block;
+    //     height: 4px;
+    //     position: absolute;
+    //     left: 0;
+    //     top: 0;
+    //     max-width: 147px;
+    //
+    //     @media(min-width: $container-mobile) {
+    //       width: 30%;
+    //     }
+    //   }
+    // }
+
+    // cite {
+    //   font-family: $font-base;
+    //   display: block;
+    //   font-style: italic;
+    // }
+
+    .blockquote {
+
       position: relative;
-      margin-top: 0;
-      padding-bottom: 0;
-      margin: 0;
 
-      p {
-        @include responsive-font(2vw, 17px, 25px, 25px);
-        opacity: .5;
-        font-style: italic;
-        font-family: $font-base;
-        margin-bottom: 0;
-        position: relative;
-        overflow: visible;
-      }
+      blockquote {
 
-      // @media(min-width: $container-ipad) {
-      //   margin-top: 4rem;
-      //   padding-bottom: 4rem;
-      // }
+        font-weight: $font-weight-bold;
+        @include fluid-type(rem-calc($container-mobile), rem-calc($container-desktop), 1.25rem, 2rem);
 
-      &:before {
-        content: '';
-        display: block;
-        height: 4px;
-        position: absolute;
-        left: 0;
-        top: 0;
-        max-width: 147px;
-
-        @media(min-width: $container-mobile) {
-          width: 30%;
+        &,
+        & * {
+          color: $accent;
         }
       }
-    }
 
-    cite {
-      font-family: $font-base;
-      display: block;
-      font-style: italic;
+      &:before,
+      &:after {
+
+        content: '';
+        position: absolute;
+        left: 40%;
+        right: 40%;
+        height: 2px;
+        background: fade-out($accent,0.5);
+      }
+
+      &:before {
+
+        top: 0;
+      }
+
+      &:after {
+
+        bottom: 0;
+      }
     }
 
     // Horizontal rule.

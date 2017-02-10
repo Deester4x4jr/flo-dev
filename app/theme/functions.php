@@ -332,6 +332,9 @@ function air_scripts() {
 		'expandSubMenu'         => '<span class="screen-reader-text">' . esc_html__( 'Open sub menu', 'air' ) . '</span>',
 		'collapseSubMenu'       => '<span class="screen-reader-text">' . esc_html__( 'Close sub menu', 'air' ) . '</span>',
 	) );
+  wp_localize_script( 'scripts', 'form', array(
+		'submit_url' => admin_url( 'admin-ajax.php' ),
+	) );
 }
 add_action( 'wp_enqueue_scripts', 'air_scripts' );
 
@@ -342,6 +345,11 @@ function get_short_hash($groupID, $salt = 'thaw_design') {
   $hash = substr($hash,0,13);
 
   return $hash;
+}
+
+// IMPORT CUSTOM POST TYPE DEFINITIONS
+foreach( glob( get_template_directory() . "/custom-posts/*.php" ) as $filename ) {
+    include $filename;
 }
 
 // Function to load all Custom Field Groups from code
@@ -685,3 +693,67 @@ function simple_locator_infowindow_flo($infowindow) {
   $infowindow = '<h4 class="awesome">'.$title.'</h4>'.'<a href="#" onClick="event.preventDefault(); get_directions('.$id.');">Get Directions - <i class="fa fa-fw fa-map-o"></i></a>';
   return $infowindow;
 } add_filter('simple_locator_infowindow','simple_locator_infowindow_flo');
+
+// Function to create new Contact Form Entry in WP
+function create_contact_form_entry( $fields = false ) {
+
+  if ( $fields === false || count($fields) < 1 ) {
+    return 'Missing fields on contact creation';
+  }
+
+  foreach ($fields as $key=>$val) {
+    if ( !strlen($val) ) {
+      return 'Fields are empty';
+    }
+  }
+
+  $new_contact = array(
+  	'post_title'	=> $fields['email'],
+  	'post_type'		=> 'contacts',
+  	'post_status'	=> 'publish'
+  );
+
+  $post_id = wp_insert_post( $new_contact );
+
+  if ( !$post_id ) {
+    return 'Failed to submit your contact';
+  }
+
+  // save a basic text value
+  $keys = array(
+    'first' => 'field_'.get_short_hash('contact_first_name'),
+    'last' => 'field_'.get_short_hash('contact_last_name'),
+    'email' => 'field_'.get_short_hash('contact_email'),
+    'message' => 'field_'.get_short_hash('contact_message'),
+  );
+
+  foreach ($keys as $k=>$v) {
+    update_field( $v, $fields[$k], $post_id );
+  }
+
+  return true;
+}
+
+// WTF?!?!??!?!??
+function form_submit_actions() {
+
+  $form_data = $_POST['fields'];
+
+  if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+
+    $response = create_contact_form_entry( $form_data );
+
+    if ( $response === false ) {
+      echo 'Something went wrong creating the contact';
+      wp_die();
+    } else {
+
+      echo $response;
+    }
+	} else {
+
+    echo "Looks like you don't support AJAX";
+  }
+  wp_die();
+} add_action( 'wp_ajax_nopriv_post_form_send_form', 'form_submit_actions' );
+add_action( 'wp_ajax_post_form_send_form', 'form_submit_actions' );

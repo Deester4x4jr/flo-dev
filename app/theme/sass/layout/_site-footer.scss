@@ -24,6 +24,11 @@ footer.site-footer {
     z-index: 20;
     opacity: 0.5;
     transition: 0.2s all ease;
+    background: rgba(0, 157, 255, 0.28);
+    border-radius: 200px;
+    padding: 0.25rem 1rem;
+    margin-bottom: 0.5rem;
+    text-shadow: none;
 
     &:hover {
       opacity: 1;
@@ -148,5 +153,40 @@ footer.site-footer {
 
   img {
     max-width: 100%;
+  }
+
+  @media (max-width: #{$container-mobile}) {
+
+    padding: 30px;
+    min-height: rem-calc(400px);
+
+    & .shoutout {
+
+      left: 1rem;
+      margin-bottom: 1.25rem;
+      transform: none;
+    }
+
+    & .divider {
+
+      background-position: center bottom;
+    }
+
+    &:before {
+
+      @include absolute-cover(0);
+      content: "";
+      background: radial-gradient(80% 80% at bottom,rgba(0,32,52,.85) 25%, rgba(0,32,52,.95) 75%);
+      z-index: 2;
+    }
+
+    & nav {
+      display: none;
+    }
+
+    & .site-info {
+
+      @include center;
+    }
   }
 }

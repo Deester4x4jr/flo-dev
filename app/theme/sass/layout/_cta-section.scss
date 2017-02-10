@@ -7,6 +7,12 @@ section {
     background-color: transparent;
     position: relative;
     overflow: hidden;
+    clip-path: polygon(0 0, 100% 10%, 100% 100%, 0% 100%);
+
+    @media (max-width: #{$container-mobile}) {
+
+      clip-path: polygon(0 0, 100% 4%, 100% 100%, 0% 100%);
+    }
 
     // &.cta-content-center.banner {
     //
@@ -24,7 +30,7 @@ section {
     & .container {
 
       @include center(1080px);
-      padding: 4rem 0;
+      padding: 5rem 0;
       z-index: 5;
       // height: 100%;
 
@@ -53,11 +59,13 @@ section {
       border-radius: $standard-radius;
       padding: 1.5rem;
       margin-bottom: 1rem;
+      margin-top: 3rem;
       height: 12rem;
       cursor: pointer;
       overflow: hidden;
 
       @media(max-width: $grid-base-size) {
+
         @include stack;
         margin: 1rem auto;
         width: 80%;

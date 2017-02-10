@@ -27,6 +27,10 @@
     'jar' => '1g Jars',
     'liquid' => 'Syringes',
     'vape' => 'Ceramic Vape Cartridges',
+    'indica' => 'Indica Strains',
+    'sativa' => 'Sativa Strains',
+    'hybrid' => 'Hybrid Strains',
+    'xact-xpose' => 'Xact & Xpose Formulas',
   );
 
   $main_class = 'hero-section hero-content-' . get_sub_field('section_alignment') . ' hero-section-' . get_post_type();
@@ -36,7 +40,7 @@
     if ( get_sub_field('section_icon') ) {
       $icon = explode(' ',get_sub_field('section_icon'));
     } else {
-      $url = 'https://placehold.it/1008x633.jpg/f0f8ff/020202?text=placeholder+image%0D1008px+x+633px';
+      // $url = 'https://placehold.it/1008x633.jpg/f0f8ff/020202?text=placeholder+image%0D1008px+x+633px';
     }
   }
 
@@ -101,6 +105,8 @@
           echo '<i class="fa fa-fw '.$icon[0].'"></i>';
         }
       }
+
+      unset($icon);
     ?>
 
   </div>

@@ -23,7 +23,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-<div id="page" class="site">
+<div id="page" class="site do-scroll-magic">
 	<!-- <a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'air' ); ?></a> -->
 
 	<!-- Omnipresent contact bubble -->
@@ -32,8 +32,19 @@
   	<i id="fa-fg" class="fa fa-fw fa-paper-plane fa-stack-1x"></i>
 	</div>
 
-	<div id="customer-form" class="contact-form">
-		<?php ninja_forms_display_form( 3 ); ?>
+	<div id="contact-form" class="contact-form">
+		<form id="inner-form"	method="post">
+			<div class="container">
+				<input name="first" placeholder="First Name" class="half form-listener" />
+				<input name="last" placeholder="Last Name" class="half form-listener" />
+			</div>
+			<div class="container">
+				<input name="email" placeholder="Email" class="form-listener" />
+			</div>
+			<div class="container">
+				<textarea name="message" placeholder="What's on your mind?" class="form-listener"></textarea>
+			</div>
+		</form>
 	</div>
 
 	<?php get_template_part( 'template-parts/nav', 'header' ); ?>
