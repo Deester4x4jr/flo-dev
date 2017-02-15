@@ -3,3 +3,4 @@
 //=require ellipsis.min.js
 //=require ScrollMagic.min.js
 //=require animation.gsap.min.js
+//=require js.cookie.js

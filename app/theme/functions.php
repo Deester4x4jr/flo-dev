@@ -731,10 +731,22 @@ function create_contact_form_entry( $fields = false ) {
     update_field( $v, $fields[$k], $post_id );
   }
 
+  $mailsender = $fields['first'] . ' ' . $fields['last'] . ' <' . $fields['email'] . '>';
+  $mailheaders = array(
+    'From: ' . $mailsender,
+    'Reply-To: ' . $mailsender,
+  );
+  $mailsubject = 'New customer contact from the website!';
+  $mailstring = PHP_EOL . $fields['first'] . ' ' . $fields['last'] . 'writes:' . PHP_EOL;
+  $mailstring .= PHP_EOL . 'Message:' . PHP_EOL . $fields['message'] . PHP_EOL;
+  $mailstring .= PHP_EOL . 'Please respond at your earliest convenience.';
+
+  wp_mail('josh@thaw.io',$mailsubject,$mailstring,$mailheaders);
+
   return true;
 }
 
-// WTF?!?!??!?!??
+// function to handle form AJAX call
 function form_submit_actions() {
 
   $form_data = $_POST['fields'];

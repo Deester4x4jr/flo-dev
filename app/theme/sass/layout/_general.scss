@@ -193,3 +193,14 @@ div.loader {
   width: 100%;
   text-align: center;
 }
+
+// SweetAlert2 overrides
+.swal2-container {
+
+    z-index: 10000000;
+
+    &.swal2-in {
+
+      background-color: fade-out($quinary,0.1);
+    }
+}

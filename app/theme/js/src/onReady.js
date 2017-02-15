@@ -83,7 +83,100 @@ function scrapeForm () {
   });
 }
 
+function do_cookie ( action ) {
+
+  if ( typeof action == 'undefined' ) {
+    action = false;
+  }
+
+  Cookies.defaults.domain = 'flo.dev';
+  Cookies.defaults.expires = 14;
+
+  var cookie;
+
+  if ( action ) {
+
+    return new Promise( function (resolve, reject) {
+
+      Cookies.set('flo_age_verification', true);
+
+      cookie = Cookies.get('flo_age_verification');
+
+      if ( cookie ) {
+        resolve();
+      } else {
+        reject('Oops... It looks like something went wrong.');
+      }
+    });
+  } else {
+
+    cookie = Cookies.get('flo_age_verification');
+
+    if ( typeof cookie == 'undefined' ) {
+      cookie = false;
+    }
+
+    return cookie;
+  }
+}
+
 jQuery(document).ready(function() {
+
+  if ( do_cookie(false) === false ) {
+
+    // disable right-click while the age verification is open
+    jQuery('body').on('contextmenu',function() {
+       return false;
+    });
+
+    // 18+ Check and Cookie Storage
+    var ageVerify = "<p>We are required by law to verify your age before allowing you to view this website.</p>";
+    ageVerify += "<p>By clicking 'I am 21+', you are providing confirmation that you are legally over the age of 21.</p>";
+    ageVerify += "<p><span style='color: red;'><bold>If you are not, please click 'Exit'.</bold></span></p>";
+    ageVerify += "<p><sub>We use <a href='https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies' target='_blank'>cookies</a> to save your age verification.";
+    ageVerify += " By clicking 'Enter' you acknowledge and accept our use of cookies for this purpose.</sub></p>";
+
+    swal({
+      title: "Age Verification",
+      type: 'error',
+      html: ageVerify,
+      padding: 50,
+      showCancelButton: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      confirmButtonText: 'I am 21+',
+      cancelButtonText: 'Exit',
+      reverseButtons: true,
+      preConfirm: function() {
+        return do_cookie(true);
+      },
+      onOpen: function () {
+        jQuery('.swal2-confirm').blur();
+      },
+    }).then( function( result ) {
+      swal.close();
+      jQuery('body').off('contextmenu');
+    }, function (dismiss) {
+      if (dismiss === 'cancel') {
+        swal({
+          type: 'success',
+          title: 'Thanks for being honest...',
+          text: 'Redirecting to goodtoknowcolorado.com',
+          onOpen: function() {
+            setTimeout(function () {
+              window.location = "https://goodtoknowcolorado.com/";
+            }, 1000);
+          },
+          showCancelButton: false,
+          showCloseButton: false,
+          showConfirmButton: false,
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+        });
+      }
+    });
+  }
+
 
   // Get the ScrollMagic Library ready to pull rabbits out of stuff
   var controller = new ScrollMagic.Controller();
@@ -124,6 +217,9 @@ jQuery(document).ready(function() {
       preConfirm: scrapeForm,
       onClose: function() {
         jQuery('#inner-form').off('blur focus');
+      },
+      onOpen: function () {
+        jQuery('#inner-form input').first().focus();
       },
     }).then(function ( result ) {
       swal({

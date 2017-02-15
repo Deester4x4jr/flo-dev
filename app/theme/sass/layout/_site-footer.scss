@@ -8,8 +8,6 @@ footer.site-footer {
   position: relative;
   padding: 20px;
   padding-top: 3rem;
-  background: url(/rockies-draft.png) 0rem 20rem no-repeat fixed #002034;
-  background-size: contain;
   color: $color-text-light;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
   margin-top: 8rem;
@@ -43,7 +41,7 @@ footer.site-footer {
   & .divider {
 
     @include absolute-cover(0);
-    background: url(/rockies-draft.png) 0 20rem no-repeat fixed #002034;
+    background: url(/wp-content/uploads/rockies-draft.png) 0 20rem no-repeat fixed #002034;
     background-size: contain;
     z-index: 1;
   }
@@ -147,7 +145,7 @@ footer.site-footer {
   }
 
   a {
-    text-transform: lowercase;
+    text-transform: capitalize;
     margin-bottom: 1rem;
   }
 

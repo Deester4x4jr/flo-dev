@@ -7,7 +7,7 @@
   position: fixed;
   @include fluid-type(rem-calc($container-mobile), rem-calc($grid-base-size), rem-calc(50px), rem-calc(80px), height);
   width: 100%;
-  z-index: 9000;
+  z-index: 1000;
   background: $color-header;
   box-shadow: 0 1px 2px rgba(0,0,0,0.3);
   transition: 0.3s background ease, transform 0.3s ease;
@@ -42,7 +42,7 @@
     &.nav-collapse {
 
       text-align: center;
-      text-transform: lowercase;
+      text-transform: capitalize;
       padding: 0 !important;
       margin: 0 !important;
 
