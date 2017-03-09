@@ -39,7 +39,7 @@ function setup_results(output,hasData) {
     });
   } else {
 
-    mapResults.html(output).promise().done(function() {
+    mapResults.removeClass('no-results').html(output).promise().done(function() {
       mapResults.fadeIn("fast",function() {
 
         var outerHeight = mapResults.outerHeight();
@@ -55,6 +55,8 @@ function setup_results(output,hasData) {
       dispensaries.on('click',function() {
         dispensaries.removeClass('active');
         jQuery(this).addClass('active');
+        // theForm.addClass('off-screen');
+        // mapResults.addClass('off-screen');
       });
     });
   }
@@ -125,5 +127,3 @@ function wpsl_before_submit(active_form, formelements) {
   }
   mapResults.fadeOut().removeClass('short-list');
 }
-
-// <a href="http://#" class="infowindow-open map-link" onClick="event.preventDefault(); openInfoWindow(1);">Show on Map</a>

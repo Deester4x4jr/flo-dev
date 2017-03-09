@@ -6,16 +6,23 @@
 
 //! responsive-nav.js 1.0.39 by @viljamis
 // sassified by @rolle
-#nav {
+#header-nav-mobile {
   text-align: center;
   clip: rect(0 0 0 0);
   max-height: 0;
   position: absolute;
-  display: block;
+  display: none;
   overflow: hidden;
   zoom: 1;
   user-select: none;
   list-style: none;
+  width: 80%;
+  height: auto;
+  left: 50%;
+  top: 50%;
+  background: transparent;
+  border-radius: 3px;
+  transform: translateX(-50%);
 
   ul {
     margin-bottom: 0;
@@ -32,70 +39,7 @@
       width: 100%;
 
       a {
-        font-weight: 500;
-      }
-
-      @media (min-width: $responsivenav) {
-        border: 0;
-        display: inline-block;
-        height: 55px;
-        line-height: 55px;
-        position: relative;
-
-        // Dropdown toggles
-        &.menu-item-has-children,
-        &.page-item-has-children {
-
-          > a {
-            padding-right: 2rem;
-          }
-
-          button.dropdown-toggle {
-            @include vertical-align();
-            opacity: .8;
-            background-image: url('../svg/chevron-down.svg');
-            background-repeat: no-repeat;
-            background-position: center;
-            content: ' ';
-            width: 10px;
-            height: 10px;
-            position: absolute;
-            right: 0;
-            margin-top: -.1rem;
-            padding-right: .2rem;
-            vertical-align: text-bottom;
-            background-color: transparent;
-          }
-        }
-
-        li {
-          @media (min-width: $responsivenav) {
-            max-width: $dropdown-width;
-            border: 0;
-            display: block;
-            height: auto;
-            line-height: 1.0909090909;
-          }
-
-          &.menu-item-has-children,
-          &.page-item-has-children {
-            > a {
-              padding-right: 2rem;
-            }
-
-            button.dropdown-toggle {
-              background-image: url('../svg/chevron-right.svg');
-              background-repeat: no-repeat;
-              background-position: center;
-              top: 22px;
-              padding-right: .2rem;
-            }
-          }
-        }
-      }
-
-      @media screen and (min-width: $responsivenav) {
-        width: auto;
+        font-weight: 600;
       }
 
       &.focus > a {
@@ -104,7 +48,7 @@
     }
 
     a {
-      background: $color-navigation-bg;
+      background-color: $color-navigation-bg;;
       color: $color-navigation-text;
       float: left;
       padding: .9em 1.1em;
@@ -112,124 +56,9 @@
       width: 100%;
       font-size: $font-size-navigation;
 
-      @media screen and (min-width: $responsivenav) {
-        border-bottom: 0;
-        padding: 1em 1.5em;
-        margin: 0;
-        float: left;
-        text-align: center;
-        display: inline-block;
-        padding: 0 16px;
-      }
-
       &:hover {
-        background-color: $color-navigation-hover;
-      }
-    }
-
-    // No hover background on the first level
-    &:first-child {
-      li a {
-        background: $color-navigation-bg;
-
-        &:hover {
-          color: $color-navigation-first-level-text-hover;
-        }
-      }
-    }
-
-    @media screen and (min-width: $responsivenav) {
-      width: auto;
-      position: relative;
-
-      // Depth: nav ul li
-      li {
-        &:hover > ul,
-        li:focus > ul,
-        &.focus > ul {
-          top: 55px;
-          left: 38%;
-          margin-left: -75px;
-
-          // Animate:
-          opacity: 1;
-        }
-      }
-
-      // Depth: nav ul ul
-      ul {
-        float: left;
-        margin: 0;
-        position: absolute;
-        text-align: center;
-
-        // Without out-animation:
-        // top: 85px;
-        // left: -999em;
-        // z-index: 99999;
-
-        // With out animation:
-        top: 55px;
-        left: 38%;
-        margin-left: -75px;
-
-        // Animate:
-        transition-property: opacity, visibility;
-        transition-duration: .25s, 0s;
-        transition-delay: .25s, .25s;
-        transition: opacity .3s ease-in-out, top .3s ease-in-out;
-        opacity: 0;
-
-        li:hover > ul,
-        li:focus > ul,
-        li.focus > ul {
-          top: 0;
-          left: 0%;
-          margin-left: $dropdown-width;
-
-          // Animate:
-          opacity: 1;
-        }
-
-        a {
-          padding: $list-padding;
-          white-space: normal;
-          width: $dropdown-width;
-        }
-
-        // Depth: nav ul ul ul
-        ul {
-          left: -999em;
-          top: 20px;
-
-          li:hover > ul,
-          li:focus > ul,
-          li.focus > ul {
-            top: 0;
-            left: 0%;
-            margin-left: $dropdown-width;
-
-            // Animate:
-            opacity: 1;
-            visibility: visible;
-          }
-        }
-      }
-    }
-  }
-
-  @media screen and (min-width: $responsivenav) {
-    position: relative;
-    max-height: none;
-    overflow: visible;
-
-    // Accessible hover/focus
-    .dropdown:hover,
-    li.focus {
-
-      ul {
-        max-height: 500px; // 100% won't work here, so we need fixed height
-        overflow: visible;
+        color: $color-navigation-hover;
+        background-color: fade-out($quarternary,0.25);
       }
     }
   }
@@ -241,20 +70,7 @@
       margin-bottom: 0;
       background: $color-dropdown-bg;
 
-      @media screen and (min-width: $responsivenav) {
-        max-height: 0;
-        overflow: hidden;
-      }
-
-      @media(min-width: $responsivenav) {
-        border-radius: $dropdown-border-radius;
-      }
-
       li {
-
-        @media screen and (min-width: $responsivenav) {
-          width: 100%;
-        }
 
         a {
           color: $color-dropdown-text;
@@ -265,15 +81,6 @@
           &:active {
             background: $color-dropdown-hover-bg;
             color: $color-dropdown-hover-text;
-
-            @media(min-width: $responsivenav) {
-              border-radius: $dropdown-border-radius;
-            }
-          }
-
-          @media screen and (min-width: $responsivenav) {
-            text-align: left;
-            border: 0;
           }
         }
       }
@@ -292,7 +99,7 @@
   // Mobile styles
   @media screen and (max-width: $responsivenav) {
     visibility: visible;
-    width: 100%;
+    display: block;
 
     &.opened {
       visibility: visible;
@@ -382,9 +189,9 @@
   text-decoration: none;
   position: relative;
   overflow: hidden;
-  float: right;
+  float: none;
   line-height: 39px;
-  padding: 0 .75em;
+  padding: .75em;
   background: transparent;
 
   span {
@@ -408,17 +215,15 @@
 
   @media(max-width: ($responsivenav)-1px) {
     width: auto;
-    float: right;
-    top: 30px;
-    right: 20px;
-    position: relative;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    position: absolute;
   }
 
   .burger-icon {
     @include burger(20px, 3px, 3px, $color-navigation-toggle);
-    float: left;
-    margin-top: 18px;
-    margin-right: 10px;
+    margin-top: 6px;
   }
 
   &.active .burger-icon {

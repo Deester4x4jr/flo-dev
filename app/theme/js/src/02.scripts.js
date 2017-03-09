@@ -17,10 +17,10 @@ var navigation = responsiveNav(".nav-collapse", {
   openDropdown: screenReaderTexts.expandSubMenu,
   closeDropdown: screenReaderTexts.collapseSubMenu,
   open: function() {
-    customLabel.innerHTML = screenReaderTexts.collapseMenu;
+    // customLabel.innerHTML = screenReaderTexts.collapseMenu;
   },
   close: function() {
-    customLabel.innerHTML = screenReaderTexts.expandMenu;
+    // customLabel.innerHTML = screenReaderTexts.expandMenu;
   },
   resizeMobile: function() {
     customToggle.setAttribute('aria-controls', 'nav');

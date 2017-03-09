@@ -39,7 +39,7 @@
       display: none;
     }
 
-    &.nav-collapse {
+    &.nav-full {
 
       text-align: center;
       text-transform: capitalize;
@@ -81,7 +81,7 @@
     }
 
     @media(max-width: ($responsivenav)-1px) {
-      @include centered;
+      @include center(50%);
     }
 
     .site-title {

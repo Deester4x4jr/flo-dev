@@ -13,7 +13,7 @@
 
 	</div>
 
-	<?php echo ( get_field('display_feed') ? do_shortcode('[instagram-feed id="2960020102"]') : $noop ); ?>
+	<?php echo ( get_field('display_feed') ? do_shortcode('[instagram-feed]') : $noop ); ?>
 
 	<footer class="site-footer">
 

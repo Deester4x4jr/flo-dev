@@ -89,7 +89,12 @@ function do_cookie ( action ) {
     action = false;
   }
 
-  Cookies.defaults.domain = 'flo.dev';
+  if(location.hostname == "flo.dev"){
+    Cookies.defaults.domain = 'flo.dev';
+  } else {
+    Cookies.defaults.domain = 'focusedlabs.com';
+  }
+
   Cookies.defaults.expires = 14;
 
   var cookie;

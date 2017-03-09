@@ -123,6 +123,7 @@ register_nav_menus( array(
   'header_right' => __( 'Header Right', 'air'),
   'footer_left' => __( 'Footer Left', 'air'),
   'footer_right' => __( 'Footer Right', 'air'),
+  'mobile_menu' => __( 'Mobile Menu', 'air'),
 ) );
 
 /**
@@ -327,8 +328,8 @@ function air_scripts() {
   wp_enqueue_script( 'jquery-core' );
   wp_enqueue_script( 'scripts', get_template_directory_uri() . '/js/all.js', array(), AIR_VERSION, true );
   wp_localize_script( 'scripts', 'screenReaderTexts', array(
-		'expandMenu'            => esc_html__( 'Open menu', 'air' ),
-		'collapseMenu'          => esc_html__( 'Close menu', 'air' ),
+		'expandMenu'            => esc_html__( 'MENU', 'air' ),
+		'collapseMenu'          => esc_html__( 'CLOSE', 'air' ),
 		'expandSubMenu'         => '<span class="screen-reader-text">' . esc_html__( 'Open sub menu', 'air' ) . '</span>',
 		'collapseSubMenu'       => '<span class="screen-reader-text">' . esc_html__( 'Close sub menu', 'air' ) . '</span>',
 	) );
@@ -741,7 +742,7 @@ function create_contact_form_entry( $fields = false ) {
   $mailstring .= PHP_EOL . 'Message:' . PHP_EOL . $fields['message'] . PHP_EOL;
   $mailstring .= PHP_EOL . 'Please respond at your earliest convenience.';
 
-  wp_mail('josh@thaw.io',$mailsubject,$mailstring,$mailheaders);
+  wp_mail('info@focusedlabs.com',$mailsubject,$mailstring,$mailheaders);
 
   return true;
 }

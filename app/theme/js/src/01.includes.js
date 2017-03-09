@@ -4,3 +4,4 @@
 //=require ScrollMagic.min.js
 //=require animation.gsap.min.js
 //=require js.cookie.js
+//=require responsive-nav.min.js

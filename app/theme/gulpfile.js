@@ -121,7 +121,7 @@ gulp.task('js', function() {
           __dirname + "/node_modules/**"
         ]}))
         .pipe(concat('all.js'))
-        .pipe(uglify({preserveComments: false, compress: true, mangle: true}).on('error',function(e){console.log('\x07',e.message);return this.end();}))
+        // .pipe(uglify({preserveComments: false, compress: true, mangle: true}).on('error',function(e){console.log('\x07',e.message);return this.end();}))
         .pipe(gulp.dest(jsDest))
         .pipe(reload());
 });

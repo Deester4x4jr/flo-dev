@@ -16,9 +16,7 @@ main.google-maps {
   bottom: 0;
   left: 0;
   width: 100vw;
-  position: absolute;;
-  // margin-top: -4.5rem;
-  // margin-bottom: -8.25rem;
+  position: absolute;
 
   & #map-box {
     position: relative;
@@ -49,6 +47,7 @@ main.google-maps {
     overflow-y: scroll;
     height: auto;
     left: 1rem;
+    transition: all 0.3s ease;
 
     &.short-list {
 
@@ -200,6 +199,18 @@ main.google-maps {
             color: $color-text-dark;
           }
         }
+      }
+    }
+  }
+
+  & #map-form.map-form-left,
+  & #results-box {
+
+    @media screen and (max-width: $responsivenav) {
+      @include column(1/2);
+
+      &.off-screen {
+        left: -45%;
       }
     }
   }

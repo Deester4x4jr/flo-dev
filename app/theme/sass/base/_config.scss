@@ -52,9 +52,9 @@ $color-footer: $quarternary;
 $color-smoke: lighten($accent, 55);
 
 // Main navigation settings
-$color-navigation-bg: transparent;
-$color-navigation-text: rgba(#fff, .8);
-$color-navigation-hover: #3e4853;
+$color-navigation-bg: $color-header;
+$color-navigation-text: $off-white;
+$color-navigation-hover: $primary;
 $color-navigation-first-level-text-hover: #fff;
 $color-navigation-toggle: $color-navigation-text;
 $color-navigation-toggle-hover: $color-navigation-first-level-text-hover;
