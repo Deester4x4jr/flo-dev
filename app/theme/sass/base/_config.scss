@@ -1,0 +1,132 @@
+// --------------------------------------------------------------
+// Theme options
+//
+// Start here!
+// This is the core file where most of the theme magic happens.
+// --------------------------------------------------------------
+
+// Uncomment for debugging
+// @include debug(black);
+
+// Typography
+$rem-base: 16px;
+
+// Base Colors:
+//      - Set 1: https://coolors.co/00d88d-3ab795-e2725b-002034-553592
+//      - Set 2: https://coolors.co/ffffff-f0f8ff-020202-1b1b1b-536878
+$primary:       #00f19d;      // Pastel Aqua
+$secondary:     #3ab795;      // Keppel
+$tertiary:      #ed6a5a;      // Terra Cotta
+$quarternary:   #002034;      // Maastricht Blue
+$quinary:       #553592;      // Blue-Magenta Violet
+$white:         #ffffff;      // Pure White
+$black:         #020202;      // Rich Black (FOGRA39)
+$off-white:     #f0f8ff;      // Alice Blue
+$off-black:     #1b1b1b;      // Erie Black
+$accent:        #536878;      // Payne's Grey
+
+// Strain Colors
+$hybrid:        #256EFF;      // Blue Crayola
+$sativa:        #FF672B;      // Smashed Pumpkin
+$indica:        $quinary;     // Blue-Magenta Violet
+
+// Assigned Colors
+$color-links: $secondary;
+$color-links-alt: $tertiary;
+$color-hover: lighten($color-links,18);
+$color-body: $off-black;         // Find-Replace with $color-text
+$color-text: $off-black;
+$color-text-light: $off-white;
+$color-text-dark: $black;
+$color-headings: #333;
+$color-body-darker: #444;
+$color-grey: #dadfe1;
+$color-darkgrey: #6c7a89;
+$color-lightgrey: #8e8e8e;
+$color-dark: #1a1a1a;
+$color-black: $black;
+$color-fog: #b0b0b0;
+$color-alt: #aacd6e;
+$color-header: fade-out($quarternary,0.5);
+$color-footer: $quarternary;
+$color-smoke: lighten($accent, 55);
+
+// Main navigation settings
+$color-navigation-bg: $color-header;
+$color-navigation-text: $off-white;
+$color-navigation-hover: $primary;
+$color-navigation-first-level-text-hover: #fff;
+$color-navigation-toggle: $color-navigation-text;
+$color-navigation-toggle-hover: $color-navigation-first-level-text-hover;
+$list-padding: 1em 1.5em;
+$font-size-navigation: .8rem;
+
+// Defaults
+$standard-radius: 3px;
+
+// Drop down settings
+$dropdown-width: 200px;
+$color-dropdown-bg: #222;
+$color-dropdown-text: #fff;
+$color-dropdown-hover-bg: #3e4853;
+$color-dropdown-hover-text: #fff;
+$dropdown-border-radius: $standard-radius;
+
+// Font settings
+// You can use these font stacks normally with `font-family: $font-sans;` for instance.`
+$font-base: 'Libre Franklin', 'Helvetica Neue', Helvetica, sans-serif;
+$font-headings: 'Source Sans Pro', 'Helvetica Neue', Helvetica, sans-serif;
+$font-monospace: 'Menlo', 'Courier', monospace;
+
+// Font settings
+$font-min-size: 16px; // Minimum font size, on mobile (default: 16px)
+$font-max-size: 20px; // Maximum font size, on desktop (default: 21px)
+$font-base-line-height: 1.78; // Line height for paragraphs
+$font-base-line-height-elements: 1.68; // Line height for other elements like table cells and spans
+$headings-line-height-setup: force; // Force: all headings have same line height. Flexible: values are set separately in _typography.scss
+$headings-line-height-forced: 1.22; // This is effective only if force is chosen in $headings-line-height-setup
+$headings-scale: medium; // Change this as a base for your project or create your own in _typography.scss.
+
+// -------------//
+// Font Weights //
+// ----------------------------------//
+$font-weight-fine:      100;         // font-weight: 100;
+$font-weight-thin:      200;         // font-weight: 200;
+$font-weight-light:     300;         // font-weight: 300;
+$font-weight-normal:    400;         // font-weight: 400;
+$font-weight-medium:    500;         // font-weight: 500;
+$font-weight-thick:     600;         // font-weight: 600;
+$font-weight-heavy:     700;         // font-weight: 700;
+$font-weight-bold:      800;         // font-weight: 800;
+$font-weight-black:     900;         // font-weight: 900;
+// ----------------------------------------------------//
+$font-base-weight:      $font-weight-normal;           // Default font weight
+$h1-weight:             $font-weight-black;            //
+$h2-weight:             $font-weight-thick;            //
+$h3-weight:             $font-weight-heavy;            //
+$headings-weight:       $font-weight-medium;           //
+
+// Breakpoints
+$grid-type: fluid; // 'fluid' or 'snappy'
+$layout-max-width: 100%;
+
+// Container settings
+$container-default-pad: 4rem; // Default padding between containers, mostly vertically. Tweak _containers.scss.
+$grid-base-size: 960px; // Layout max width on desktop. This is default .container size
+$container-mobile: 480px;
+$container-desktop: 1200px;
+$container-ipad: 770px;
+$container-ipad-landscape: 1024px;
+
+// Form settings
+$color-button-bg: #262626;
+$color-button-text: #fff;
+$color-forms: #cfd9db;
+$color-forms-text: #666;
+$color-forms-bg: #fff;
+$forms-border-radius: $standard-radius;
+$forms-border-no-radius: 0;
+$forms-border-focus: darken(#cfd9db, 25%);
+
+// Where navigation transforms into responsive
+$responsivenav: 872px;

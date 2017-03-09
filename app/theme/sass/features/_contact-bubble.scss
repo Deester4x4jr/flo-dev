@@ -1,0 +1,38 @@
+#contact-bubble {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  width: 4rem;
+  height: 4rem;
+  z-index: 900;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &:active {
+    transform: scale(1);
+    filter: brightness(0.75);
+  }
+
+  & #fa-bg {
+    @include centered;
+    color: $secondary;
+    text-shadow: 0 0 20px fade-out($primary,0.5);
+  }
+
+  & #fa-fg {
+    color: $off-white;
+    font-size: 1.5rem;
+    line-height: normal;
+    top: 50%;
+    transform: translateY(-50%) rotateY(180deg) translateX(-4%);
+    text-shadow: -1px 1px 2px fade-out($off-black,0.5);
+  }
+}
+
+.contact-form {
+  display: none;
+}

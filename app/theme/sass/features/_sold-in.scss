@@ -1,0 +1,89 @@
+section.banner {
+
+  & .sold-in {
+
+    position: absolute;
+    bottom: 1rem;
+    right: 3rem;
+    text-align: center;
+    z-index: 10;
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    span {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 0.5rem;
+
+      & strong {
+        margin: 0;
+        padding: 0.25rem 2rem;
+        font-size: 1rem;
+        background: $accent;
+      }
+
+      &.med,
+      &.rec,
+      &.jar,
+      &.liquid,
+      &.vape,
+      &.indica,
+      &.sativa,
+      &.hybrid,
+      &.xact-xpose {
+        margin-right: 0;
+        border-radius: 100%;
+        width: 3rem;
+        height: 3rem;
+        background-color: green;
+        background-position: 50% 50%;
+        background-size: 50%;
+        background-repeat: no-repeat;
+        transition: transform 0.2s ease;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+
+      &.med {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/med.svg');
+        background-color: $primary;
+      }
+      &.rec {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/rec.svg');
+        background-color: $secondary;
+      }
+      &.jar {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/jar.svg');
+        background-color: $tertiary;
+      }
+      &.liquid {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/liquid.svg');
+        background-color: $quarternary;
+      }
+      &.vape {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/vape.svg');
+        background-color: $quinary;
+      }
+      &.indica {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/indica.svg');
+        background-color: $indica;
+      }
+      &.sativa {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/sativa.svg');
+        background-color: $sativa;
+      }
+      &.hybrid {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/hybrid.svg');
+        background-color: $hybrid;
+      }
+      &.xact-xpose {
+        background-image: url('/wp-content/themes/flo-theme-2017/svg/xact_xpose.svg');
+        background-color: $accent;
+      }
+    }
+  }
+}

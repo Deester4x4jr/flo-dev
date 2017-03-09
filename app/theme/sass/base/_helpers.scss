@@ -1,0 +1,165 @@
+// Uncomment for debugging
+// @include debug(white);
+
+@mixin no-buffer {
+  margin: 0;
+  padding: 0;
+
+  &:before,
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin background-cover() {
+  background: {
+    size: cover;
+    repeat: no-repeat;
+    position: center;
+  }
+}
+
+@mixin background-auto() {
+  background: {
+    size: 100% auto;
+    repeat: no-repeat;
+    position: center;
+  }
+}
+
+@mixin hiddentext() {
+  text-indent: -9999px;
+  overflow: hidden;
+  text-decoration: none;
+  display: block;
+  font-size: 0;
+  text-align: start;
+}
+
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-style: preserve-3d;
+}
+
+@mixin horizontal-align {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  transform-style: preserve-3d;
+}
+
+@mixin centered {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  transform-style: preserve-3d;
+}
+
+@mixin un-align {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+}
+
+@mixin absolute-cover($dist) {
+  position: absolute;
+  top: $dist;
+  bottom: $dist;
+  left: $dist;
+  right: $dist;
+}
+
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@function convert-to-rem($value, $base-value: $rem-base) {
+  $value: strip-unit($value) / strip-unit($base-value) * 1rem;
+  @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+@function rem-calc($values, $base-value: $rem-base) {
+  $max: length($values);
+
+  @if $max == 1 { @return convert-to-rem(nth($values, 1), $base-value); }
+
+  $remValues: ();
+  @for $i from 1 through $max {
+    $remValues: append($remValues, convert-to-rem(nth($values, $i), $base-value));
+  }
+  @return $remValues;
+}
+
+@mixin one-up($selector, $join: 'insert') {
+
+  $sequences: &;
+  $new-sequences: ();
+  $new-sequence: '';
+  $new-selector: '';
+
+  @each $sequence in $sequences {
+
+    $parent: nth($sequence, -1);
+    $grandparent: nth($sequence, -2);
+
+    @if $join == 'append' { // Append the selector to the grandparent element: .grandparent.selector .parent
+
+      $new-selector: "#{$grandparent}#{$selector}";
+      $new-sequence: set-nth($sequence, -2, $new-selector);
+    } @elseif $join == 'prepend' { // Prepend the selector the the parent element: .grandparent .selector.parent
+
+      $new-selector: "#{$selector}#{$parent}";
+      $new-sequence: set-nth($sequence, -1, $new-selector);
+    } @else { // Insert the selector between the parent and grandparent elements: .grandparent .selector .parent
+
+      $new-selector: "#{$selector} #{$parent}";
+      $new-sequence: set-nth($sequence, -1, $new-selector);
+    }
+
+    $new-sequences: append($new-sequences, $new-sequence, comma);
+  }
+
+  // output: section.hero-section .hero-content-right article
+
+  @at-root #{$new-sequences} {
+    @content;
+  }
+}
+
+// Truly Fluid Typography Mixin
+// Examples:    @include fluid-type(37.5rem, 80rem, 2.5rem, 5rem);
+//              @include fluid-type(rem-calc(700px), 80rem, 1.5rem, 3rem, padding-bottom);
+
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size, $props: font-size) {
+
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+        @each $prop in $props {
+            #{$prop}: $min-font-size;
+        }
+        @media screen and (min-width: $min-vw) {
+            @each $prop in $props {
+                #{$prop}: calc(#{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)}));
+            }
+        }
+
+        @media screen and (min-width: $max-vw) {
+            @each $prop in $props {
+                #{$prop}: $max-font-size;
+            }
+        }
+    }
+  } @else {
+    @error "Detected mixed units. Please use the same units for all parameters. " + $u1 +", " + $u2 + ", " + $u3 +", "+ $u4;
+  }
+}
