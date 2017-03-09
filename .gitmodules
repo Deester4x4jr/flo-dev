@@ -13,3 +13,6 @@
 [submodule "app/plugins/acf-code"]
 	path = app/plugins/acf-code
 	url = https://github.com/mbovel/acf-code.git
+[submodule "app/theme"]
+	path = app/theme
+	url = https://github.com/Deester4x4jr/flo-theme-2017.git
